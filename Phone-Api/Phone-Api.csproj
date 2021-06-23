@@ -15,4 +15,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Phone-Api.Repository\Phone-Api.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
