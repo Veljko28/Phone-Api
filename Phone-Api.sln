@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phone-Api", "Phone-Api\Phone-Api.csproj", "{2B5555AB-6E1E-400B-B72F-892DC7DCE3A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phone-Api", "Phone-Api\Phone-Api.csproj", "{2B5555AB-6E1E-400B-B72F-892DC7DCE3A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phone-Api.Repository", "Phone-Api.Repository\Phone-Api.Repository.csproj", "{F2D3BCBD-A216-4E89-BFF7-2F1089C42058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phone-Api.Repository", "Phone-Api.Repository\Phone-Api.Repository.csproj", "{F2D3BCBD-A216-4E89-BFF7-2F1089C42058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phone-Api.Models", "Phone-Api.Models\Phone-Api.Models.csproj", "{817B7F69-8B58-46B1-B96B-24BA9AEB483D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phone-Api.Models", "Phone-Api.Models\Phone-Api.Models.csproj", "{817B7F69-8B58-46B1-B96B-24BA9AEB483D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
