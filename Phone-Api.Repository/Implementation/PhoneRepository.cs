@@ -1,6 +1,7 @@
 ﻿using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
+using Phone_Api.Repository.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,19 +11,39 @@ namespace Phone_Api.Repository.Implementation
 {
 	public class PhoneRepository : IPhoneRepository
 	{
+		private readonly AppDbContext _context;
+
+		public PhoneRepository(AppDbContext context)
+		{
+			_context = context;
+		}
 		public async Task<bool> AddPhoneAsync(PhoneRequest phone)
 		{
-			throw new NotImplementedException();
+			PhoneResponse phoneResponse = new PhoneResponse
+			{
+				Id = Guid.NewGuid().ToString(),
+				Name = phone.Name,
+				Description = phone.Description,
+				Price = phone.Price,
+				DateCreated = phone.DateCreated,
+				Exires = phone.Exires
+			};
+
+			var response = await _context.Phones.AddAsync(phoneResponse);
+
+			return response != null;
 		}
 
-		public async  Task<PhoneResponse> GetPhoneInfoByIdAsync(string Id)
+		public async Task<PhoneResponse> GetPhoneInfoByIdAsync(string Id)
 		{
-			throw new NotImplementedException();
+			var response = await _context.Phones.FindAsync(Id);
+			return response;
 		}
 
 		public async Task<IEnumerable<PhoneResponse>> SearchPhonesAsync(string search)
 		{
-			throw new NotImplementedException();
+			//var response = await _context.Phones.FindAsync(search);
+			//return response;
 		}
 	}
 }
