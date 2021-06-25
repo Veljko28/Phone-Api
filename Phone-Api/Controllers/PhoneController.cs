@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Phone_Api.Helpers;
 using Phone_Api.Models.Requests;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace Phone_Api.Controllers
 			_phoneRepository = phoneRepository;
 		}
 
-		[HttpPost("api/phone/add")]
+		[HttpPost(ApiRoutes.Phones.Add)]
 		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phone)
 		{
 			bool succeded = await _phoneRepository.AddPhoneAsync(phone);
@@ -28,5 +30,33 @@ namespace Phone_Api.Controllers
 
 			return Ok(phone);
 		}
+
+		[HttpGet(ApiRoutes.Phones.Id)]
+		public async Task<IActionResult> PhoneById([FromRoute] string phoneId)
+		{
+			PhoneResponse phone = await _phoneRepository.GetPhoneInfoByIdAsync(phoneId);
+
+			if (phone == null)
+			{
+				return BadRequest("Cannot find the phone with Id: " + phoneId);
+
+			}
+			else return Ok(phone);
+
+		}
+
+		[HttpGet(ApiRoutes.Phones.Search)]
+		public IActionResult FindPhones([FromRoute] string keyword)
+		{
+			var result = _phoneRepository.SearchPhonesAsync(keyword);
+
+			if (result == null)
+			{
+				return BadRequest("No phones found");
+			}
+
+			return Ok(result);
+		}
+
 	}
 }
