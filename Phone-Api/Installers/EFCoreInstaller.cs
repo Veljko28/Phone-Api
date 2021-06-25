@@ -13,7 +13,7 @@ namespace Phone_Api.Installers
 	{
 		public void InstallServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("EmployeeDBConnection")));
+			services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 		}
 	}
 }
