@@ -13,7 +13,7 @@ namespace Phone_Api.Installers
 	{
 		public void InstallServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<IPhoneRepository, PhoneRepository>();
+			services.AddScoped<IPhoneRepository, PhoneRepository>();
 		}
 	}
 }

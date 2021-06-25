@@ -30,6 +30,7 @@ namespace Phone_Api.Repository.Implementation
 			};
 
 			var response = await _context.Phones.AddAsync(phoneResponse);
+			await _context.SaveChangesAsync();
 
 			return response != null;
 		}
@@ -42,8 +43,8 @@ namespace Phone_Api.Repository.Implementation
 
 		public async Task<IEnumerable<PhoneResponse>> SearchPhonesAsync(string search)
 		{
-			//var response = await _context.Phones.FindAsync(search);
-			//return response;
+			var response = await _context.Phones.FindAsync(search);
+			return new List<PhoneResponse> { response };
 		}
 	}
 }

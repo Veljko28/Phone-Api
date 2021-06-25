@@ -16,7 +16,7 @@ namespace Phone_Api.Controllers
 			_phoneRepository = phoneRepository;
 		}
 
-		[HttpGet]
+		[HttpPost("api/phone/add")]
 		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phone)
 		{
 			bool succeded = await _phoneRepository.AddPhoneAsync(phone);

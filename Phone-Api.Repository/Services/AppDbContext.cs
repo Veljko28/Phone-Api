@@ -18,10 +18,5 @@ namespace Phone_Api.Repository.Services
 
 		public DbSet<PhoneResponse> Phones { get; set; }
 
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-		}
 	}
 }
