@@ -5,6 +5,7 @@ using Phone_Api.Repository.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Phone_Api.Repository.Implementation
@@ -41,10 +42,16 @@ namespace Phone_Api.Repository.Implementation
 			return response;
 		}
 
-		public async Task<IEnumerable<PhoneResponse>> SearchPhonesAsync(string search)
+		public IEnumerable<PhoneResponse> SearchPhonesAsync(string search)
 		{
-			var response = await _context.Phones.FindAsync(search);
-			return new List<PhoneResponse> { response };
+			IEnumerable<PhoneResponse> phones = _context.Phones.Where(x => x.Name.Contains(search) || x.Description.Contains(search));
+
+			if (phones.Count() == 0)
+			{
+				return null;
+			}
+
+		    return phones;
 		}
 	}
 }
