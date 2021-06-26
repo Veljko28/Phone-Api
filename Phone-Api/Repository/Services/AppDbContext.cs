@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Phone_Api.Models.Responses;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Phone_Api.Repository.Services
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
