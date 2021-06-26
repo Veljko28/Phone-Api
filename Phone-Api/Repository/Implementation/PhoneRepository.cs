@@ -44,7 +44,7 @@ namespace Phone_Api.Repository.Implementation
 
 		public IEnumerable<PhoneResponse> SearchPhonesAsync(string search)
 		{
-			IEnumerable<PhoneResponse> phones = _context.Phones.Where(x => x.Name.Contains(search) || x.Description.Contains(search));
+			IEnumerable<PhoneResponse> phones = _context.Phones.Where(x => x.Name.ToLower().Contains(search.ToLower()) || x.Description.ToLower().Contains(search.ToLower()));
 
 			if (phones.Count() == 0)
 			{
