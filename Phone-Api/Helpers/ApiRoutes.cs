@@ -15,5 +15,13 @@ namespace Phone_Api.Helpers
 
 			public const string Search = "api/phone/search/{keyword}";
 		}
+
+		public static class Users
+		{
+			public const string Register = "api/user/register";
+
+			public const string Login = "api/user/login";
+
+		}
 	}
 }
