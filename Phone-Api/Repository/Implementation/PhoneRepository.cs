@@ -27,7 +27,6 @@ namespace Phone_Api.Repository.Implementation
 				Description = phone.Description,
 				Price = phone.Price,
 				DateCreated = phone.DateCreated,
-				Exires = phone.Exires
 			};
 
 			var response = await _context.Phones.AddAsync(phoneResponse);
