@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Services;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Phone_Api.Installers
 
 			services.AddAuthentication();
 
-			services.AddIdentity<IdentityUser, IdentityRole>(options => {
+			services.AddIdentity<UserModel, IdentityRole>(options => {
 				options.Password.RequiredUniqueChars = 0;
 				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequireUppercase = false;
