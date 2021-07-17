@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Table1]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY, 
+    [Phones] NVARCHAR(50) NULL,
+	[Bids] NVARCHAR(50) NULL,
+	[Ratings] NVARCHAR(50) NULL,
+	[Phones_sold] int NOT NULL DEFAULT 0,
+	[Contact] NVARCHAR(50) NULL,
+)
