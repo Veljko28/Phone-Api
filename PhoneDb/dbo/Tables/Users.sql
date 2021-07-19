@@ -1,10 +1,10 @@
-﻿CREATE TABLE [dbo].[Table1]
+﻿CREATE TABLE [dbo].[Users]
 (
 	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY,
-	[Image] NVARCHAR(256) NOT NULL,
+	[Image] NVARCHAR(256) NULL,
 	[Email] NVARCHAR(150) NOT NULL,
 	[UserName] NVARCHAR(150) NOT NULL,
-	[Password] NVARCHAR(150) NOT NULL, 
+	[Password] NVARCHAR(256) NOT NULL, 
 	[Description] NVARCHAR(256) NULL, 
 	[Phones_sold] int NOT NULL DEFAULT 0,
 	[Contact] NVARCHAR(50) NULL,
