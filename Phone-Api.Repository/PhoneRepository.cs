@@ -19,13 +19,14 @@ namespace Phone_Api.Repository
 		{
 			_configuration = configuration;
 		}
-		public async Task<PhoneModel> addPhoneAsync(PhoneRequest phoneRequest, string userId)
+		public async Task<PhoneModel> AddPhoneAsync(PhoneRequest phoneRequest, string userId)
 		{
 
 			PhoneModel phone = new PhoneModel
 			{
 				Id = Guid.NewGuid().ToString(),
 				Seller = userId,
+				Price = phoneRequest.Price,
 				Name = phoneRequest.Name,
 				Image = phoneRequest.Image,
 				Category = phoneRequest.Category,
@@ -33,7 +34,7 @@ namespace Phone_Api.Repository
 
 			};
 
-			string sql = "exec _spAddPhone @Id @Seller @Name @Image @Category @Brand";
+			string sql = "exec [_spAddPhone] @Id, @Seller, @Price, @Name, @Image, @Category, @Brand";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection") ))
 			{
@@ -50,9 +51,9 @@ namespace Phone_Api.Repository
 			return null;
 		}
 
-		public async Task<PhoneModel> getPhoneByIdAsync(string Id)
+		public async Task<PhoneModel> GetPhoneByIdAsync(string Id)
 		{
-			string sql = "exec _spFindPhoneByID @Id";
+			string sql = "exec [_spFindPhoneByID] @Id";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -63,6 +64,20 @@ namespace Phone_Api.Repository
 				return phone;
 			}
 
+		}
+
+		public async Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId)
+		{
+			string sql = "exec [_spSellerPhonesById] @Id";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				var phones = await db.QueryAsync<PhoneModel>(sql, new { Id = sellerId});
+
+				return phones;
+			}
 		}
 	}
 }
