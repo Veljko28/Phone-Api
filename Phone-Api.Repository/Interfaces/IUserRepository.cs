@@ -1,5 +1,6 @@
 ﻿using Phone_Api.Models;
 using Phone_Api.Models.Requests;
+using Phone_Api.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,8 +10,9 @@ namespace Phone_Api.Repository.Interfaces
 {
 	public interface IUserRepository
 	{
-		Task<bool> RegisterAsync(UserRequest userRequest);
+		Task<GenericResponse> RegisterAsync(UserRequest userRequest);
 
 		Task<UserModel> LoginAsync(LoginRequest loginRequest);
+		Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change);
 	}
 }

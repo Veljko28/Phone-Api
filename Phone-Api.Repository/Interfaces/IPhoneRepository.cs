@@ -10,7 +10,8 @@ namespace Phone_Api.Repository.Interfaces
 	public interface IPhoneRepository
 	{
 
-		Task<PhoneModel> addPhoneAsync(PhoneRequest phoneRequest, string userId);
-		Task<PhoneModel> getPhoneByIdAsync(string Id);
+		Task<PhoneModel> AddPhoneAsync(PhoneRequest phoneRequest, string userId);
+		Task<PhoneModel> GetPhoneByIdAsync(string Id);
+		Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId);
 	}
 }
