@@ -13,9 +13,11 @@ namespace Phone_Api.Helpers
 		{
 			public const string type = "/phones";
 
-			public const string Add = root + version + type + "/add";
+			public const string Add = root + version + type + "/add/{userId}";
 
 			public const string GetById = root + version + type + "/{phoneId}";
+
+			public const string GetSellerPhones = root + version + type + "/seller" + "/{sellerId}";
 
 		}
 		public static class UserRoutes
@@ -25,6 +27,16 @@ namespace Phone_Api.Helpers
 			public const string Register = root + version + type + "/register";
 
 			public const string Login = root + version + type + "/login";
+
+			public const string ChangePassword = root + version + type + "/changepassword/{userId}";
+
+		}
+
+		public static class GenericRoutes
+		{
+			public const string type = "/generic";
+
+			public const string ImageUpload = root + version + type + "/uploadimage";
 
 		}
 	}
