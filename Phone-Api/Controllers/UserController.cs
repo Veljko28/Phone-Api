@@ -2,6 +2,7 @@
 using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,11 @@ namespace Phone_Api.Controllers
 		[HttpPost(ApiRoutes.UserRoutes.Register)]
 		public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
 		{
-			bool registered = await _users.RegisterAsync(userRequest);
+			GenericResponse registered = await _users.RegisterAsync(userRequest);
 
-			if (!registered)
+			if (!registered.Success)
 			{
-				return BadRequest("Failed to register");
+				return BadRequest(registered.ErrorMesage);
 			}
 
 			return Ok("Successfully registered !");
@@ -43,6 +44,19 @@ namespace Phone_Api.Controllers
 			}
 
 			return Ok(user);
+		}
+
+		[HttpPost(ApiRoutes.UserRoutes.ChangePassword)]
+		public async Task<IActionResult> ChangePassword([FromRoute] string userId, [FromBody] ChangePasswordRequest change)
+		{
+			GenericResponse response = await _users.ChangePasswordAsync(userId, change);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMesage);
+			}
+
+			return Ok("You have successfully changed your password");
 		}
 	}
 }

@@ -18,32 +18,41 @@ namespace Phone_Api.Controllers
 			_phones = phones;
 		}
 
-		[HttpPost(ApiRoutes.PhoneRoutes.Add)]
-		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phoneRequest, [FromBody] string userId)
+		private IActionResult genericResponse<T>(T success, string error)
 		{
-			var phone = await _phones.addPhoneAsync(phoneRequest, userId);
-
-			if (phone == null)
+			if (success == null)
 			{
-				return BadRequest("Error while creating the phone");
+				return BadRequest(error);
 			}
 
-			return Ok(phone);
+			return Ok(success);
+		}
+
+		[HttpPost(ApiRoutes.PhoneRoutes.Add)]
+		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phoneRequest, [FromRoute] string userId)
+		{
+			var phone = await _phones.AddPhoneAsync(phoneRequest, userId);
+
+		    return genericResponse(phone, "Error while creating the phone");
+			
 		}
 
 		[HttpGet(ApiRoutes.PhoneRoutes.GetById)]
 		public async Task<IActionResult> GetById([FromRoute] string phoneId)
 		{
-			return Ok("phone id = " + phoneId);
 
-			var phone = await _phones.getPhoneByIdAsync(phoneId);
+			var phone = await _phones.GetPhoneByIdAsync(phoneId);
 
-			if (phone == null)
-			{
-				return BadRequest("No phone was found with id " + phoneId);
-			}
+		    return genericResponse(phone, "No phone was found with id " + phoneId);
+		}
 
-			return Ok(phone);
+		[HttpGet(ApiRoutes.PhoneRoutes.GetSellerPhones)]
+		public async Task<IActionResult> GetSellerPhones([FromRoute] string sellerId)
+		{
+			var phones = await _phones.GetSellerPhonesByIdAsync(sellerId);
+
+			return genericResponse(phones,"Cannot find any phones for this user");
+
 		}
 	}
 }
