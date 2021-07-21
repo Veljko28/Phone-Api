@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[WishLists]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY, 
+    [UserId] NVARCHAR(50) NOT NULL, 
+    [PhoneId] NVARCHAR(50) NOT NULL
+)
