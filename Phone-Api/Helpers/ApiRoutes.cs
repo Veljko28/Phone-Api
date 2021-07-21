@@ -32,12 +32,26 @@ namespace Phone_Api.Helpers
 
 		}
 
+		public static class WishlistRoutes
+		{
+			public const string type = "/wishlist";
+
+			public const string AddToWishList = root + version + type + "/add";
+
+			public const string RemoveFromWishList = root + version + type + "/remove/{wishId}";
+
+			public const string GetUserWishes = root + version + type + "/get/{userId}";
+
+		}
+
 		public static class GenericRoutes
 		{
 			public const string type = "/generic";
 
 			public const string ImageUpload = root + version + type + "/uploadimage";
 
+			public const string Contact = root + version + type + "/contact";
 		}
+
 	}
 }
