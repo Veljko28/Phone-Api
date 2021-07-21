@@ -27,7 +27,7 @@ namespace Phone_Api.Controllers
 
 			if (!registered.Success)
 			{
-				return BadRequest(registered.ErrorMesage);
+				return BadRequest(registered.ErrorMessage);
 			}
 
 			return Ok("Successfully registered !");
@@ -46,14 +46,14 @@ namespace Phone_Api.Controllers
 			return Ok(user);
 		}
 
-		[HttpPost(ApiRoutes.UserRoutes.ChangePassword)]
+		[HttpPatch(ApiRoutes.UserRoutes.ChangePassword)]
 		public async Task<IActionResult> ChangePassword([FromRoute] string userId, [FromBody] ChangePasswordRequest change)
 		{
 			GenericResponse response = await _users.ChangePasswordAsync(userId, change);
 
 			if (!response.Success)
 			{
-				return BadRequest(response.ErrorMesage);
+				return BadRequest(response.ErrorMessage);
 			}
 
 			return Ok("You have successfully changed your password");
