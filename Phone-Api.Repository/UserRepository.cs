@@ -28,7 +28,7 @@ namespace Phone_Api.Repository
 				return new GenericResponse
 				{
 					Success = false,
-					ErrorMesage = "The Passwords do not match"
+					ErrorMessage = "The Passwords do not match"
 				};
 
 			string findUserPassword = "exec [_spGetUserById] @Id";
@@ -41,12 +41,12 @@ namespace Phone_Api.Repository
 
 				db.Close();
 
-				if (user == null) return new GenericResponse { Success = false, ErrorMesage = "Cannot find user !"};
+				if (user == null) return new GenericResponse { Success = false, ErrorMessage = "Cannot find user !"};
 
 				string dbPassword = user.Password;
 
 				if (!PasswordHashing.ComparePasswords(dbPassword, change.Old_Password))
-						return new GenericResponse { Success = false, ErrorMesage = "Incorrect Password !" };
+						return new GenericResponse { Success = false, ErrorMessage = "Incorrect Password !" };
 
 				string passwordHash = PasswordHashing.HashPassword(change.New_Password);
 
@@ -56,7 +56,7 @@ namespace Phone_Api.Repository
 
 				if (rowsModified > 0) return new GenericResponse { Success = true };
 
-				return new GenericResponse { Success = false, ErrorMesage = "We are exipirencing problems on the server. Try again later" };
+				return new GenericResponse { Success = false, ErrorMessage = "We are exipirencing problems on the server. Try again later" };
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Phone_Api.Repository
 			if (userRequest.Confirm_Password != userRequest.Password)
 				return new GenericResponse {
 					Success = false,
-					ErrorMesage = "The Passwords do not match !"
+					ErrorMessage = "The Passwords do not match !"
 				};
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -108,7 +108,7 @@ namespace Phone_Api.Repository
 					return new GenericResponse
 					{
 						Success = false,
-						ErrorMesage = "This Email is already in use !"
+						ErrorMessage = "This Email is already in use !"
 					};
 				}
 
@@ -121,7 +121,7 @@ namespace Phone_Api.Repository
 					return new GenericResponse
 					{
 						Success = false,
-						ErrorMesage = "This Username is already in use !"
+						ErrorMessage = "This Username is already in use !"
 					};
 				}
 
@@ -154,7 +154,7 @@ namespace Phone_Api.Repository
 				return new GenericResponse
 				{
 					Success = false,
-					ErrorMesage = "Problem with registering the user"
+					ErrorMessage = "Problem with registering the user"
 				};
 
 			}
