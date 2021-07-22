@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Purchases]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY,
+	[UserId] NVARCHAR(50) NOT NULL,
+	[Total] MONEY NOT NULL,
+	[PurchaseDate] DATETIME2(7) NOT NULL DEFAULT getutcdate()
+)
