@@ -27,6 +27,7 @@ namespace Phone_Api.Repository
 				Id = Guid.NewGuid().ToString(),
 				Seller = userId,
 				Price = phoneRequest.Price,
+				Description = phoneRequest.Description,
 				Name = phoneRequest.Name,
 				Image = phoneRequest.Image,
 				Category = phoneRequest.Category,
@@ -34,7 +35,7 @@ namespace Phone_Api.Repository
 
 			};
 
-			string sql = "exec [_spAddPhone] @Id, @Seller, @Price, @Name, @Image, @Category, @Brand";
+			string sql = "exec [_spAddPhone] @Id, @Seller, @Price, @Description, @Name, @Image, @Category, @Brand";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection") ))
 			{

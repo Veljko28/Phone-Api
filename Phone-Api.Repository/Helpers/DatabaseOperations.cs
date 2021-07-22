@@ -40,13 +40,13 @@ namespace Phone_Api.Repository.Helpers
 		}
 
 
-		public static async Task<T> GenericQuerySingle<T>(string sql, T payload, IConfiguration _configuration)
+		public static async Task<N> GenericQuerySingle<T,N>(string sql, T payload, IConfiguration _configuration)
 		{
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
 				await db.OpenAsync();
 
-				T list = (await db.QueryAsync<T>(sql, payload)).FirstOrDefault();
+				N list = (await db.QueryAsync<N>(sql, payload)).FirstOrDefault();
 
 				return list;
 			}
