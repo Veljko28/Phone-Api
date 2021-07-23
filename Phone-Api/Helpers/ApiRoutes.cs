@@ -51,6 +51,34 @@ namespace Phone_Api.Helpers
 			public const string ImageUpload = root + version + type + "/uploadimage";
 
 			public const string Contact = root + version + type + "/contact";
+
+			public const string Subscribe = root + version + type + "/subscribe";
+
+		}
+
+		public static class PurchaseRoutes
+		{
+			public const string type = "/purchase";
+
+			public const string AddPhoneToPurchase = root + version + type + "/phonetopurchase/{purchaseId}/{phoneId}";
+
+			public const string AddPurchase = root + version + type + "/addpurchase";
+
+			public const string GetPurchasePhones = root + version + type + "/getphones/{purchaseId}";
+		}
+
+
+		public static class BidRoutes
+		{
+			public const string type = "/bid";
+
+			public const string AddBid = root + version + type + "/add";
+
+			public const string BidById = root + version + type + "/{bid_Id}";
+
+			public const string AddHistory = root + version + type +  "/addhistory";
+
+			public const string BidHistories = root + version + type +  "/histories/{bid_Id}";
 		}
 
 	}
