@@ -12,6 +12,8 @@ using Phone_Api.Models.Requests;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using Dapper;
+using Phone_Api.Repository.Helpers;
+using Phone_Api.Models;
 
 namespace Phone_Api.Controllers
 {
@@ -50,7 +52,7 @@ namespace Phone_Api.Controllers
 
                         await fileStream.FlushAsync();
 
-                        string imagePath = "http://localhost:44396" + "/Uploads/" + upload.Files.FileName;
+                        string imagePath = "https://localhost:44396" + "/Uploads/" + upload.Files.FileName;
 
                         using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 						{
@@ -84,5 +86,58 @@ namespace Phone_Api.Controllers
                 return BadRequest(ex.Message.ToString());
             }
         }
+
+        [HttpPost(ApiRoutes.GenericRoutes.Contact)]
+        public async Task<IActionResult> Contact([FromBody] ContactRequest req)
+		{
+            string sql = "exec [_spContactSupport] @Id, @Name, @Email, @Subject, @Message";
+
+            ContactModel model = new ContactModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = req.Name,
+                Email = req.Email,
+                Subject = req.Subject,
+                Message = req.Message
+            };
+
+            var result = await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to send the support message");
+
+            if (!result.Success)
+			{
+                return BadRequest(result.ErrorMessage);
+			}
+
+            return Ok("Your message has been sent !");
+		}
+
+        public class EmailModel
+		{
+			public string Email { get; set; }
+		}
+
+
+        [HttpPost(ApiRoutes.GenericRoutes.Subscribe)]
+        public async Task<IActionResult> Subscribe([FromBody] EmailModel email)
+		{
+            SubscribeModel model = new SubscribeModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = email.Email
+            };
+
+            string sql = "exec [_spAddSubscribeEmail] @Id, @Email";
+
+            var result = await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to add email to database");
+
+            if (!result.Success)
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+
+            return Ok("Your email has been sent !");
+        }
+
+
     }
 }
