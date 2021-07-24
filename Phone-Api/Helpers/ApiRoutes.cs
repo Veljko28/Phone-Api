@@ -54,6 +54,8 @@ namespace Phone_Api.Helpers
 
 			public const string Subscribe = root + version + type + "/subscribe";
 
+			public const string Search = root + version + type + "/search/{term}";
+
 		}
 
 		public static class PurchaseRoutes
