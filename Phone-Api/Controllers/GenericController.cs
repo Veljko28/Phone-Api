@@ -138,6 +138,24 @@ namespace Phone_Api.Controllers
             return Ok("Your email has been sent !");
         }
 
+        [HttpPost(ApiRoutes.GenericRoutes.Search)]
+        public async Task<IActionResult> Search([FromRoute] string term)
+		{
+            term = InjestionProtect.StringSqlRemove(term);
 
+            const string phoneSql = "exec [_spSearchPhones] @Term";
+            const string bidSql = "exec [_spSearchBids] @Term";
+
+            var phones = await DatabaseOperations.GenericQueryList<dynamic, PhoneModel>(phoneSql, new { Term = '%' + term + '%'}, _configuration);
+            var bids = await DatabaseOperations.GenericQueryList<dynamic, BidModel>(bidSql, new { Term = '%' + term + '%' }, _configuration);
+
+            SearchModel model = new SearchModel
+            {
+                Phones = phones,
+                Bids = bids
+            };
+
+            return Ok(model);
+		}
     }
 }
