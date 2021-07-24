@@ -8,6 +8,6 @@ namespace Phone_Api.Models.Responses
 	{
 		public bool Success { get; set; }
 
-		public string ErrorMesage { get; set; }
+		public string ErrorMessage { get; set; }
 	}
 }
