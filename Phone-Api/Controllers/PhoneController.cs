@@ -54,5 +54,15 @@ namespace Phone_Api.Controllers
 			return genericResponse(phones,"Cannot find any phones for this user");
 
 		}
+
+		[HttpGet(ApiRoutes.PhoneRoutes.GetImages)]
+		public async Task<IActionResult> GetImages([FromRoute] string phoneId)
+		{
+			var phones = await _phones.GetPhoneImagesAsync(phoneId);
+
+			return genericResponse(phones, "Cannot find any images for this phone");
+
+		}
+
 	}
 }
