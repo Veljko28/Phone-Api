@@ -13,5 +13,6 @@ namespace Phone_Api.Repository.Interfaces
 		Task<PhoneModel> AddPhoneAsync(PhoneRequest phoneRequest, string userId);
 		Task<PhoneModel> GetPhoneByIdAsync(string Id);
 		Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId);
+		Task<IEnumerable<string>> GetPhoneImagesAsync(string phoneId);
 	}
 }

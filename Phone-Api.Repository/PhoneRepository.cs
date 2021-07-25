@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
+using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -29,13 +30,12 @@ namespace Phone_Api.Repository
 				Price = phoneRequest.Price,
 				Description = phoneRequest.Description,
 				Name = phoneRequest.Name,
-				Image = phoneRequest.Image,
 				Category = phoneRequest.Category,
 				Brand = phoneRequest.Brand
 
 			};
 
-			string sql = "exec [_spAddPhone] @Id, @Seller, @Price, @Description, @Name, @Image, @Category, @Brand";
+			string sql = "exec [_spAddPhone] @Id, @Seller, @Price, @Description, @Name, @Category, @Brand";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection") ))
 			{
@@ -65,6 +65,13 @@ namespace Phone_Api.Repository
 				return phone;
 			}
 
+		}
+
+		public async Task<IEnumerable<string>> GetPhoneImagesAsync(string phoneId)
+		{
+			string sql = "exec [_spGetPhoneImages] @Id";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { Id = phoneId }, _configuration);
 		}
 
 		public async Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId)
