@@ -26,7 +26,6 @@ namespace Phone_Api.Repository
 			BidModel model = new BidModel
 			{
 				Id = Guid.NewGuid().ToString(),
-				Image = req.Image,
 				Name = req.Name,
 				Description = req.Description,
 				Price = req.Price,
@@ -37,7 +36,7 @@ namespace Phone_Api.Repository
 				TimeEnds = req.TimeEnds
 			};
 
-			string sql = "exec [_spAddBid] @Id, @Image, @Name, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
+			string sql = "exec [_spAddBid] @Id, @Name, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
 
 			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to add bid to database");
 		}
@@ -69,6 +68,13 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spGetBidById] @Id";
 
 			return await DatabaseOperations.GenericQuerySingle<dynamic, BidRequest>(sql, new { Id = bid_Id }, _configuration);
+		}
+
+		public async Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId)
+		{
+			string sql = "exec [_spGetUserBids] @Id";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new { Id = userId }, _configuration);
 		}
 	}
 }
