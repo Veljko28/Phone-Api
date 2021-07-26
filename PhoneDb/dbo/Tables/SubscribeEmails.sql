@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[SubscribeEmails]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY,
+	[Email] NVARCHAR(256) NOT NULL
+)
