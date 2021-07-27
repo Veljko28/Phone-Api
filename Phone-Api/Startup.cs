@@ -31,16 +31,24 @@ namespace Phone_Api
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Phone_Api v1"));
+				app.UseSwaggerUI(c => {
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "Phone_Api v1");
+					c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+				}) ;
 			}
+
+			app.UseCors();
 
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
+
+			app.UseStaticFiles();
 
 			app.UseAuthorization();
 
