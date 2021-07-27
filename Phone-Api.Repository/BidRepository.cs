@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using Phone_Api.Models;
 using Phone_Api.Models.BidModels;
 using Phone_Api.Models.Requests.BidRequests;
@@ -7,6 +8,7 @@ using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +23,7 @@ namespace Phone_Api.Repository
 			_configuration = configuration;
 		}
 
-		public async Task<GenericResponse> AddBidAsync(BidRequest req)
+		public async Task<BidModel> AddBidAsync(BidRequest req)
 		{
 			BidModel model = new BidModel
 			{
@@ -38,7 +40,19 @@ namespace Phone_Api.Repository
 
 			string sql = "exec [_spAddBid] @Id, @Name, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
 
-			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to add bid to database");
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int modified = await db.ExecuteAsync(sql, model);
+
+				if (modified > 0)
+				{
+					return model;
+				}
+			}
+
+			return null;
 		}
 
 		public async Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req)

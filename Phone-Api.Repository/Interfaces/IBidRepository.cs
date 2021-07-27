@@ -11,7 +11,7 @@ namespace Phone_Api.Repository.Interfaces
 {
 	public interface IBidRepository
 	{
-		Task<GenericResponse> AddBidAsync(BidRequest req);
+		Task<BidModel> AddBidAsync(BidRequest req);
 		Task<BidRequest> GetBidByIdAsync(string bid_Id);
 		Task<IEnumerable<BidHistoryModel>> GetBidHistoriesAsync(string bid_Id);
 		Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req);
