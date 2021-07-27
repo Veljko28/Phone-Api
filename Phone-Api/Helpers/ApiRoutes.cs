@@ -19,6 +19,8 @@ namespace Phone_Api.Helpers
 
 			public const string GetSellerPhones = root + version + type + "/seller" + "/{sellerId}";
 
+			public const string GetImages = root + version + type + "/images" + "/{phoneId}";
+
 		}
 		public static class UserRoutes
 		{
@@ -48,7 +50,9 @@ namespace Phone_Api.Helpers
 		{
 			public const string type = "/generic";
 
-			public const string ImageUpload = root + version + type + "/uploadimage";
+			public const string UserImageUpload = root + version + type + "/user" +"/image";
+
+			public const string PhoneBidImageUpload = root + version + type + "/phone" + "/image";
 
 			public const string Contact = root + version + type + "/contact";
 
@@ -77,6 +81,8 @@ namespace Phone_Api.Helpers
 			public const string AddBid = root + version + type + "/add";
 
 			public const string BidById = root + version + type + "/{bid_Id}";
+
+			public const string UserBids = root + version + type + "/user" + "/{userId}";
 
 			public const string AddHistory = root + version + type +  "/addhistory";
 
