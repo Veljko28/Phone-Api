@@ -12,11 +12,22 @@ namespace Phone_Api.Installers
 	{
 		public void InstallServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddCors(options =>
+			{
+				options.AddDefaultPolicy(
+					builder =>
+					{
+						builder.AllowAnyOrigin().AllowAnyHeader();
+					});
+			});
+
 			services.AddControllers();
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Phone_Api", Version = "v1" });
 			});
+
+
 		}
 	}
 }
