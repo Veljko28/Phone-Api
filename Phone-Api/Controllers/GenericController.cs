@@ -34,8 +34,52 @@ namespace Phone_Api.Controllers
             public IFormFile Files { get; set; }
         };
 
-        [HttpPost(ApiRoutes.GenericRoutes.ImageUpload)]
-        public async Task<IActionResult> ImageUpload([FromForm] FormUpload upload, [FromForm] UploadRequest req)
+        public async Task<bool> ImageUploadFunc(string sql, IFormFile upload, UploadRequest req)
+		{
+            try
+            {
+                if (upload.Length > 0)
+                {
+                    if (!Directory.Exists(environment.WebRootPath + "\\Uploads\\"))
+                    {
+                        Directory.CreateDirectory(environment.WebRootPath + "\\Uploads\\");
+                    }
+
+                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + upload.FileName))
+                    {
+                        await upload.CopyToAsync(fileStream);
+
+                        await fileStream.FlushAsync();
+
+                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.FileName;
+
+                        using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+                        {
+                            await db.OpenAsync();
+
+                            int rowsModified = await db.ExecuteAsync(sql, new { req.Id, Image = imagePath });
+
+                            if (rowsModified == 0) return false;
+
+
+                            return true;
+                        }
+
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch 
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<bool> UserImageUploadFunc(string sql, FormUpload upload, string Id)
         {
             try
             {
@@ -52,39 +96,72 @@ namespace Phone_Api.Controllers
 
                         await fileStream.FlushAsync();
 
-                        string imagePath = "https://localhost:44396" + "/Uploads/" + upload.Files.FileName;
+                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.Files.FileName;
 
                         using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-						{
+                        {
                             await db.OpenAsync();
 
-                            if (req.Type == uploadTypes.User)
-							{
-                               int rowsModified = await db.ExecuteAsync("exec [_spUserImageUpload] @Id, @Image", new { req.Id, Image = imagePath });
+                            int rowsModified = await db.ExecuteAsync(sql, new { Id, Image = imagePath });
 
-                               if (rowsModified == 0) return BadRequest("Unable to upload this image");
-							}
-                            else
-							{
-                                int rowsModified = await db.ExecuteAsync("exec [_spPhoneImageUpload] @Id, @Image", new { req.Id, Image = imagePath });
+                            if (rowsModified == 0) return false;
 
-                                if (rowsModified == 0) return BadRequest("Unable to upload this image");
-                            }
 
-                            return Ok("Successfully Uploaded your image");
-						}
+                            return true;
+                        }
 
                     }
                 }
                 else
                 {
-                    return BadRequest("Failed");
+                    return false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message.ToString());
+                return false;
             }
+        }
+
+
+
+        [HttpPost(ApiRoutes.GenericRoutes.UserImageUpload)]
+        public async Task<IActionResult> UserImageUpload([FromForm] FormUpload upload, [FromForm] string Id)
+        {
+            string sql = "exec [_spUserImageUpload] @Id, @Image";
+
+            var succeded = await UserImageUploadFunc(sql, upload, Id);
+
+            if (succeded)
+			{
+                return Ok("Successfully added your image");
+			}
+
+            return BadRequest("Failed to add your image");
+        }
+
+
+        [HttpPost(ApiRoutes.GenericRoutes.PhoneBidImageUpload)]
+        public async Task<IActionResult> PhoneImageUpload([FromForm] IList<IFormFile> Files, [FromForm] UploadRequest req)
+		{
+            string sql;
+            if (req.Type == uploadTypes.Phone)
+			{
+                sql = "exec [_spPhoneImageUpload] @Id, @Image";
+            }
+            else sql = "exec [_spBidImageUpload] @Id, @Image";
+
+			foreach (var image in Files)
+			{
+				var succeded = await ImageUploadFunc(sql, image, req);
+
+                if (!succeded)
+				{
+                    return BadRequest("Failed to add all images");
+				}
+			}
+
+			return Ok("Successfully added all images");
         }
 
         [HttpPost(ApiRoutes.GenericRoutes.Contact)]
