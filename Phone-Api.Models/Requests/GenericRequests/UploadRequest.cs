@@ -7,8 +7,8 @@ namespace Phone_Api.Models.Requests
 
 	public enum uploadTypes
 	{
-		User,
-		Phone
+		Phone,
+		Bid
 	}
 
 	public class UploadRequest
