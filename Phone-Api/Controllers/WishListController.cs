@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
 using Phone_Api.Models.Requests;
 using Phone_Api.Repository.Interfaces;
@@ -9,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
 {
+	
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class WishListController : Controller
 	{
 		private readonly IWishListRepository _wishList;
@@ -45,7 +49,7 @@ namespace Phone_Api.Controllers
 			return Ok("Removed the wish from the list");
 		}
 
-
+		[AllowAnonymous]
 		[HttpGet(ApiRoutes.WishlistRoutes.GetUserWishes)]
 		public async Task<IActionResult> GetUserWishes([FromRoute] string userId)
 		{

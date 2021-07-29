@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Repository.Interfaces;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
 {
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class PurchaseController : Controller
 	{
 		private readonly IPurchaseRepository _purchases;

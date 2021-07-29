@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
 using Phone_Api.Models.Requests;
 using Phone_Api.Repository.Interfaces;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
 {
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class PhoneController : Controller
 	{
 		private readonly IPhoneRepository _phones;
@@ -36,7 +39,8 @@ namespace Phone_Api.Controllers
 		    return genericResponse(phone, "Error while creating the phone");
 			
 		}
-
+		
+		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetById)]
 		public async Task<IActionResult> GetById([FromRoute] string phoneId)
 		{
@@ -46,6 +50,7 @@ namespace Phone_Api.Controllers
 		    return genericResponse(phone, "No phone was found with id " + phoneId);
 		}
 
+		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetSellerPhones)]
 		public async Task<IActionResult> GetSellerPhones([FromRoute] string sellerId)
 		{
@@ -54,7 +59,8 @@ namespace Phone_Api.Controllers
 			return genericResponse(phones,"Cannot find any phones for this user");
 
 		}
-
+		
+		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetImages)]
 		public async Task<IActionResult> GetImages([FromRoute] string phoneId)
 		{

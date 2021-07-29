@@ -14,10 +14,13 @@ using System.Data.SqlClient;
 using Dapper;
 using Phone_Api.Repository.Helpers;
 using Phone_Api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Phone_Api.Controllers
 {
-	public class GenericController : Controller
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class GenericController : Controller
 	{
         private readonly IWebHostEnvironment environment;
 		private readonly IConfiguration _configuration;
@@ -194,6 +197,7 @@ namespace Phone_Api.Controllers
 		}
 
 
+        [AllowAnonymous]
         [HttpPost(ApiRoutes.GenericRoutes.Subscribe)]
         public async Task<IActionResult> Subscribe([FromBody] EmailModel email)
 		{
@@ -215,6 +219,7 @@ namespace Phone_Api.Controllers
             return Ok("Your email has been sent !");
         }
 
+        [AllowAnonymous]
         [HttpPost(ApiRoutes.GenericRoutes.Search)]
         public async Task<IActionResult> Search([FromRoute] string term)
 		{

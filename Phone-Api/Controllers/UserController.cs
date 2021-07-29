@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
@@ -20,9 +20,18 @@ namespace Phone_Api.Controllers
 			_users = users;
 		}
 
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[HttpGet("/hello")]
+		public IActionResult Hello()
+		{
+			return Ok("hello");
+		}
+
+
 		[HttpPost(ApiRoutes.UserRoutes.Register)]
 		public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
 		{
+
 			GenericResponse registered = await _users.RegisterAsync(userRequest);
 
 			if (!registered.Success)
@@ -36,14 +45,14 @@ namespace Phone_Api.Controllers
 		[HttpPost(ApiRoutes.UserRoutes.Login)]
 		public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
 		{
-			UserModel user = await _users.LoginAsync(loginRequest);
+			TokenResponse token = await _users.LoginAsync(loginRequest);
 
-			if (user == null)
+			if (token == null)
 			{
 				return BadRequest("Failed to Login");
 			}
 
-			return Ok(user);
+			return Ok(token);
 		}
 
 		[HttpPatch(ApiRoutes.UserRoutes.ChangePassword)]
@@ -58,5 +67,21 @@ namespace Phone_Api.Controllers
 
 			return Ok("You have successfully changed your password");
 		}
+
+
+		[HttpPatch(ApiRoutes.UserRoutes.Refresh)]
+
+		public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+		{
+			var response = await _users.RefreshTokenAsync(request.Token, request.RefreshToken);
+
+			if (response == null)
+			{
+				return BadRequest();
+			}
+
+			return Ok(response);
+		}
+
 	}
 }
