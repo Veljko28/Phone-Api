@@ -15,9 +15,12 @@ namespace Phone_Api.Installers
 		{
 			services.AddSingleton<IPhoneRepository, PhoneRepository>();
 			services.AddSingleton<IUserRepository, UserRepository>();
+
 			services.AddSingleton<IWishListRepository, WishListRepository>();
 			services.AddSingleton<IPurchaseRepository, PurchaseRepository>();
+
 			services.AddSingleton<IBidRepository, BidRepository>();
+			services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
 		}
 	}
 }
