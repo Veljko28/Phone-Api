@@ -31,6 +31,8 @@ namespace Phone_Api.Helpers
 			public const string Login = root + version + type + "/login";
 
 			public const string ChangePassword = root + version + type + "/changepassword/{userId}";
+			
+			public const string Refresh = root + version + "/token" + "/refresh";
 
 		}
 
