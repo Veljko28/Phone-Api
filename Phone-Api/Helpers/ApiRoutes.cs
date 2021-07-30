@@ -17,6 +17,10 @@ namespace Phone_Api.Helpers
 
 			public const string GetById = root + version + type + "/{phoneId}";
 
+			public const string Featured = root + version + type + "/featured";
+
+			public const string Latest = root + version + type + "/latest";
+
 			public const string GetSellerPhones = root + version + type + "/seller" + "/{sellerId}";
 
 			public const string GetImages = root + version + type + "/images" + "/{phoneId}";
