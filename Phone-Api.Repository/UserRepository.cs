@@ -1,13 +1,18 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
+using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +22,14 @@ namespace Phone_Api.Repository
 	public class UserRepository : IUserRepository
 	{
 		private readonly IConfiguration _configuration;
-		public UserRepository(IConfiguration configuration)
+		private readonly JwtSettings _jwtSettings;
+		private readonly IRefreshTokenRepository _tokenDb;
+
+		public UserRepository(IConfiguration configuration, JwtSettings jwtSettings, IRefreshTokenRepository tokenDb)
 		{
 			_configuration = configuration;
+			_jwtSettings = jwtSettings;
+			_tokenDb = tokenDb;
 		}
 
 		public async Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change)
@@ -60,7 +70,7 @@ namespace Phone_Api.Repository
 			}
 		}
 
-		public async Task<UserModel> LoginAsync(LoginRequest loginRequest)
+		public async Task<TokenResponse> LoginAsync(LoginRequest loginRequest)
 		{
 			string passwordSql = "exec [_spLoginUser] @Email_UserName";
 
@@ -76,12 +86,58 @@ namespace Phone_Api.Repository
 
 			if (user == null || user.Password == null) return null;
 
-			if (!PasswordHashing.ComparePasswords(user.Password, loginRequest.Password))
+			if (user.Password != loginRequest.Password && !PasswordHashing.ComparePasswords(user.Password, loginRequest.Password))
 			{
 				return null;
 			}
 
-			return user;
+
+			JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+			byte[] key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
+			List<Claim> roleClaims = new List<Claim>
+			{
+				new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+				new Claim(JwtRegisteredClaimNames.Email, user.Email),
+				new Claim("id", user.Id),
+			};
+
+
+			var tokenDescriptor = new SecurityTokenDescriptor
+			{
+				Subject = new ClaimsIdentity(roleClaims),
+				Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+			};
+
+			var token = tokenHandler.CreateToken(tokenDescriptor);
+
+
+			var refreshToken = new RefreshToken
+			{
+				Token = tokenHandler.WriteToken(token),
+				JwtId = token.Id,
+				UserId = user.Id,
+				CreatedDate = DateTime.UtcNow,
+				Expires = DateTime.UtcNow.AddMonths(6),
+
+			};
+
+			bool addedToken = await _tokenDb.AddTokenAsync(refreshToken);
+
+			if (!addedToken)
+			{
+				return null;
+			}
+
+			return new TokenResponse
+			{
+				Token = tokenHandler.WriteToken(token),
+				RefreshToken = refreshToken.JwtId,
+				Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime).ToString()
+			};
 
 		}
 
@@ -90,7 +146,8 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spRegisterUser] @Id, @Email, @UserName, @Password";
 
 			if (userRequest.Confirm_Password != userRequest.Password)
-				return new GenericResponse {
+				return new GenericResponse
+				{
 					Success = false,
 					ErrorMessage = "The Passwords do not match !"
 				};
@@ -159,5 +216,59 @@ namespace Phone_Api.Repository
 
 			}
 		}
+
+
+			public async Task<TokenResponse> RefreshTokenAsync(string token, string refreshToken)
+			{
+				var validatedToken = JwtValidation.getPrincipalFromToken(token, _configuration);
+
+				if (validatedToken == null)
+				{
+					return null;
+				}
+
+				var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+
+				var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(expiryDateUnix);
+
+				if (expiryDateTimeUtc > DateTime.UtcNow)
+				{
+					return null;
+				}
+
+				var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+
+
+				var storedRefreshToken = await _tokenDb.FindTokenAsync(token);
+
+				if (storedRefreshToken == null || DateTime.UtcNow > storedRefreshToken.Expires || storedRefreshToken.Invalidated ||
+					storedRefreshToken.Used || storedRefreshToken.JwtId != jti)
+				{
+					return null;
+				}
+
+
+				storedRefreshToken.Used = true;
+				bool result = await _tokenDb.UpdateTokenAsync(storedRefreshToken);
+
+				if (!result)
+				{
+					return null;
+				}
+
+				string sql = "exec [_spGetUserById] @Id";
+				UserModel currentUser = await DatabaseOperations.GenericQuerySingle
+				<dynamic, UserModel>(sql ,new { Id = validatedToken.Claims.Single(x => x.Type == "id").Value },_configuration);
+
+				if (currentUser == null)
+				{
+					return null;
+				}
+				else return await LoginAsync(new LoginRequest { 
+					Email_UserName = currentUser.Email,
+					Password = currentUser.Password
+				});
+			}
+
 	}
 }
