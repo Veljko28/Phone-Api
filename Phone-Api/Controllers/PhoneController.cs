@@ -70,5 +70,26 @@ namespace Phone_Api.Controllers
 
 		}
 
+
+		[AllowAnonymous]
+		[HttpGet(ApiRoutes.PhoneRoutes.Featured)]
+		public async Task<IActionResult> Featured()
+		{
+			var phones = await _phones.GetFeaturedPhonesAsync();
+
+			return genericResponse(phones, "failed to get featured phones");
+
+		}
+
+		[AllowAnonymous]
+		[HttpGet(ApiRoutes.PhoneRoutes.Latest)]
+		public async Task<IActionResult> Latest()
+		{
+			var phones = await _phones.GetLastestPhonesAsync();
+
+			return genericResponse(phones, "failed to get latest phones");
+
+		}
+
 	}
 }
