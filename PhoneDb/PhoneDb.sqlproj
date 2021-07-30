@@ -59,14 +59,53 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Store Procedures" />
     <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\Store Procedures\User" />
+    <Folder Include="dbo\Store Procedures\Phone" />
+    <Folder Include="dbo\Store Procedures\Puchase" />
+    <Folder Include="dbo\Store Procedures\WishList" />
+    <Folder Include="dbo\Store Procedures\Generic" />
+    <Folder Include="dbo\Store Procedures\Bid" />
+    <Folder Include="dbo\Store Procedures\RefreshToken" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Store Procedures\_spAddPhone.sql" />
-    <Build Include="dbo\Store Procedures\_spFindPhoneByID.sql" />
-    <Build Include="dbo\Store Procedures\_spLoginUser.sql" />
-    <Build Include="dbo\Store Procedures\_spRegisterUser.sql" />
     <Build Include="dbo\Tables\Phones.sql" />
     <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Tables\ContactSupport.sql" />
+    <Build Include="dbo\Tables\PhonePurchases.sql" />
+    <Build Include="dbo\Tables\Purchases.sql" />
+    <Build Include="dbo\Tables\WishLists.sql" />
+    <Build Include="dbo\Store Procedures\User\_spCheckInUseEmail.sql" />
+    <Build Include="dbo\Store Procedures\User\_spCheckInUseUserName.sql" />
+    <Build Include="dbo\Store Procedures\User\_spGetUserById.sql" />
+    <Build Include="dbo\Store Procedures\User\_spUserImageUpload.sql" />
+    <Build Include="dbo\Store Procedures\User\_spRegisterUser.sql" />
+    <Build Include="dbo\Store Procedures\User\_spLoginUser.sql" />
+    <Build Include="dbo\Store Procedures\Phone\_spAddPhone.sql" />
+    <Build Include="dbo\Store Procedures\Phone\_spFindPhoneByID.sql" />
+    <Build Include="dbo\Store Procedures\Phone\_spPhoneImageUpload.sql" />
+    <Build Include="dbo\Store Procedures\Phone\_spSellerPhonesById.sql" />
+    <Build Include="dbo\Store Procedures\Puchase\_spAddPhoneToPurchase.sql" />
+    <Build Include="dbo\Store Procedures\Puchase\_spAddPurchase.sql" />
+    <Build Include="dbo\Store Procedures\Puchase\_spGetPurchasedPhones.sql" />
+    <Build Include="dbo\Store Procedures\WishList\_spAddToWishList.sql" />
+    <Build Include="dbo\Store Procedures\WishList\_spGetUserWishes.sql" />
+    <Build Include="dbo\Store Procedures\WishList\_spRemoveWish.sql" />
+    <Build Include="dbo\Store Procedures\Generic\_spChangePassword.sql" />
+    <Build Include="dbo\Store Procedures\Generic\_spContactSupport.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spAddBid.sql" />
+    <Build Include="dbo\Tables\Bids.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spAddBidHistory.sql" />
+    <Build Include="dbo\Tables\BidHistories.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spGetBidById.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spGetBidHistories.sql" />
+    <Build Include="dbo\Tables\PhoneImages.sql" />
+    <Build Include="dbo\Tables\BidImages.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spBidImageUpload.sql" />
+    <Build Include="dbo\Store Procedures\Bid\_spGetUserBids.sql" />
+    <Build Include="dbo\Tables\RefreshTokens.sql" />
+    <Build Include="dbo\Store Procedures\RefreshToken\AddRefreshToken.sql" />
+    <Build Include="dbo\Store Procedures\RefreshToken\FindRefreshToken.sql" />
+    <Build Include="dbo\Store Procedures\RefreshToken\UpdateRefreshToken.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PhoneDb.refactorlog" />

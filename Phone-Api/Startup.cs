@@ -50,6 +50,8 @@ namespace Phone_Api
 
 			app.UseStaticFiles();
 
+			app.UseAuthentication();
+
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
