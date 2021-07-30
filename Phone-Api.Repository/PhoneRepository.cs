@@ -52,6 +52,34 @@ namespace Phone_Api.Repository
 			return null;
 		}
 
+		public async Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync()
+		{
+			string sql = "SELECT TOP 4 * FROM [dbo].[Phones] ORDER BY NEWID()";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				var res = await db.QueryAsync<PhoneModel>(sql);
+
+				return res;
+			}
+		}
+
+		public async Task<IEnumerable<PhoneModel>> GetLastestPhonesAsync()
+		{
+			string sql = "SELECT TOP 4 * FROM [dbo].[Phones]";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				var res = await db.QueryAsync<PhoneModel>(sql);
+
+				return res;
+			}
+		}
+
 		public async Task<PhoneModel> GetPhoneByIdAsync(string Id)
 		{
 			string sql = "exec [_spFindPhoneByID] @Id";
