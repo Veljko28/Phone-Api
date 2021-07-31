@@ -220,21 +220,24 @@ namespace Phone_Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost(ApiRoutes.GenericRoutes.Search)]
+        [HttpGet(ApiRoutes.GenericRoutes.Search)]
         public async Task<IActionResult> Search([FromRoute] string term)
 		{
             term = InjestionProtect.StringSqlRemove(term);
 
             const string phoneSql = "exec [_spSearchPhones] @Term";
             const string bidSql = "exec [_spSearchBids] @Term";
+            const string userSql = "exec [_spSearchUsers] @Term";
 
             var phones = await DatabaseOperations.GenericQueryList<dynamic, PhoneModel>(phoneSql, new { Term = '%' + term + '%'}, _configuration);
             var bids = await DatabaseOperations.GenericQueryList<dynamic, BidModel>(bidSql, new { Term = '%' + term + '%' }, _configuration);
+            var users = await DatabaseOperations.GenericQueryList<dynamic, UserModel>(userSql, new { Term = '%' + term + '%' }, _configuration);
 
             SearchModel model = new SearchModel
             {
                 Phones = phones,
-                Bids = bids
+                Bids = bids,
+                Users = users
             };
 
             return Ok(model);
