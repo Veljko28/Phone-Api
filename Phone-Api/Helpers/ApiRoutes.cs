@@ -36,7 +36,9 @@ namespace Phone_Api.Helpers
 
 			public const string ChangePassword = root + version + type + "/changepassword/{userId}";
 			
-			public const string Refresh = root + version + "/token" + "/refresh";
+			public const string Refresh = root + version + "/token" + "/refresh"; 
+
+			public const string GetUserById = root + version + type + "/{userId}";
 
 		}
 
@@ -59,6 +61,8 @@ namespace Phone_Api.Helpers
 			public const string UserImageUpload = root + version + type + "/user" +"/image";
 
 			public const string PhoneBidImageUpload = root + version + type + "/phone" + "/image";
+
+			public const string PhoneDisplay = root + version + type + "/phone" + "/display";
 
 			public const string Contact = root + version + type + "/contact";
 
