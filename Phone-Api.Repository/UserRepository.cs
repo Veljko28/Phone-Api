@@ -32,6 +32,12 @@ namespace Phone_Api.Repository
 			_tokenDb = tokenDb;
 		}
 
+		public async Task<UserModel> GetUserByIdAsync(string Id)
+		{
+			string sql = "exec [_spGetUserById] @Id";
+			return await DatabaseOperations.GenericQuerySingle<dynamic, UserModel>(sql, new { Id }, _configuration);
+		}
+
 		public async Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change)
 		{
 			if (change.Old_Password != change.Confirm_Old_Password)
@@ -41,13 +47,11 @@ namespace Phone_Api.Repository
 					ErrorMessage = "The Passwords do not match"
 				};
 
-			string findUserPassword = "exec [_spGetUserById] @Id";
-
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
 				await db.OpenAsync();
 
-				UserModel user = (await db.QueryAsync<UserModel>(findUserPassword, new { Id = userId })).FirstOrDefault();
+				UserModel user = await GetUserByIdAsync(userId);
 
 				db.Close();
 
@@ -256,17 +260,15 @@ namespace Phone_Api.Repository
 					return null;
 				}
 
-				string sql = "exec [_spGetUserById] @Id";
-				UserModel currentUser = await DatabaseOperations.GenericQuerySingle
-				<dynamic, UserModel>(sql ,new { Id = validatedToken.Claims.Single(x => x.Type == "id").Value },_configuration);
+				UserModel currentUser = await GetUserByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
 
 				if (currentUser == null)
 				{
-					return null;
+						return null;
 				}
 				else return await LoginAsync(new LoginRequest { 
-					Email_UserName = currentUser.Email,
-					Password = currentUser.Password
+						Email_UserName = currentUser.Email,
+						Password = currentUser.Password
 				});
 			}
 
