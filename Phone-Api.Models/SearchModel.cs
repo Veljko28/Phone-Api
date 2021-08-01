@@ -8,5 +8,7 @@ namespace Phone_Api.Models
 	{
 		public IEnumerable<PhoneModel> Phones { get; set; }
 		public IEnumerable<BidModel> Bids { get; set; }
+		public IEnumerable<UserModel> Users { get; set; }
+
 	}
 }
