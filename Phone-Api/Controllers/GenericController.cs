@@ -36,6 +36,40 @@ namespace Phone_Api.Controllers
             [NotMapped]
             public IFormFile Files { get; set; }
         };
+        
+        [HttpPost(ApiRoutes.GenericRoutes.PhoneDisplay)]
+        public async Task<IActionResult> PhoneDisplay(FormUpload upload)
+        {
+            try
+            {
+                if (upload.Files.Length > 0)
+                {
+                    if (!Directory.Exists(environment.WebRootPath + "\\Uploads\\"))
+                    {
+                        Directory.CreateDirectory(environment.WebRootPath + "\\Uploads\\");
+                    }
+
+                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + upload.Files.FileName))
+                    {
+                        await upload.Files.CopyToAsync(fileStream);
+
+                        await fileStream.FlushAsync();
+
+                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.Files.FileName;
+
+                        return Ok(imagePath);
+                    }
+                }
+                else
+                {
+                    return BadRequest("Failed To Upload The Image");
+                }
+            }
+            catch
+            {
+                return BadRequest("Failed To Upload The Image");
+            }
+        }
 
         public async Task<bool> ImageUploadFunc(string sql, IFormFile upload, UploadRequest req)
 		{

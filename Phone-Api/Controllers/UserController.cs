@@ -83,5 +83,31 @@ namespace Phone_Api.Controllers
 			return Ok(response);
 		}
 
+
+		[HttpGet(ApiRoutes.UserRoutes.GetUserById)]
+
+		public async Task<IActionResult> GetUserById([FromRoute] string userId)
+		{
+			var response = await _users.GetUserByIdAsync(userId);
+
+			if (response == null)
+			{
+				return BadRequest();
+			}
+
+			UserResponse userResponse = new UserResponse
+			{
+				Id = response.Id,
+				Email = response.Email,
+				Image = response.Image,
+				UserName = response.UserName,
+				Description = response.Description,
+				Contanct = response.Contanct,
+				Phones_sold = response.Phones_sold,
+			};
+
+			return Ok(userResponse);
+		}
+
 	}
 }
