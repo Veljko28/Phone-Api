@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[_spAddPhone]
 	@Id NVARCHAR(50),
+	@Image NVARCHAR(256),
 	@Seller NVARCHAR(50),
 	@Price MONEY,
 	@Description NVARCHAR(256),
@@ -8,5 +9,5 @@
 	@Brand NVARCHAR(25)
 AS
 begin
-	INSERT INTO [dbo].[Phones] (Id, Seller, Price, [Description], [Name], Category, Brand) VALUES (@Id, @Seller, @Price, @Description, @Name, @Category, @Brand);
+	INSERT INTO [dbo].[Phones] (Id, [Image], Seller, Price, [Description], [Name], Category, Brand) VALUES (@Id, @Image, @Seller, @Price, @Description, @Name, @Category, @Brand);
 end
