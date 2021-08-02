@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
 {
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class PhoneController : Controller
 	{
 		private readonly IPhoneRepository _phones;
@@ -30,7 +29,7 @@ namespace Phone_Api.Controllers
 
 			return Ok(success);
 		}
-
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPost(ApiRoutes.PhoneRoutes.Add)]
 		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phoneRequest, [FromRoute] string userId)
 		{
@@ -40,7 +39,6 @@ namespace Phone_Api.Controllers
 			
 		}
 		
-		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetById)]
 		public async Task<IActionResult> GetById([FromRoute] string phoneId)
 		{
@@ -50,7 +48,6 @@ namespace Phone_Api.Controllers
 		    return genericResponse(phone, "No phone was found with id " + phoneId);
 		}
 
-		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetSellerPhones)]
 		public async Task<IActionResult> GetSellerPhones([FromRoute] string sellerId)
 		{
@@ -60,7 +57,6 @@ namespace Phone_Api.Controllers
 
 		}
 		
-		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.GetImages)]
 		public async Task<IActionResult> GetImages([FromRoute] string phoneId)
 		{
@@ -70,8 +66,6 @@ namespace Phone_Api.Controllers
 
 		}
 
-
-		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.Featured)]
 		public async Task<IActionResult> Featured()
 		{
@@ -81,7 +75,6 @@ namespace Phone_Api.Controllers
 
 		}
 
-		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PhoneRoutes.Latest)]
 		public async Task<IActionResult> Latest()
 		{
@@ -91,5 +84,14 @@ namespace Phone_Api.Controllers
 
 		}
 
+
+		[HttpGet(ApiRoutes.PhoneRoutes.GetPage)]
+		public async Task<IActionResult> GetPage([FromRoute] string pageId)
+		{
+			var phones = await _phones.GetPhonePageAsync(pageId);
+
+			return genericResponse(phones, "failed to get latest phones");
+
+		}
 	}
 }

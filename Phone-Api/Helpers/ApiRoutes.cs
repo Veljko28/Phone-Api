@@ -25,6 +25,9 @@ namespace Phone_Api.Helpers
 
 			public const string GetImages = root + version + type + "/images" + "/{phoneId}";
 
+			public const string GetPage = root + version + type + "/page" + "/{pageId}";
+
+
 		}
 		public static class UserRoutes
 		{
