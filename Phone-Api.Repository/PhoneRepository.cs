@@ -103,6 +103,13 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { Id = phoneId }, _configuration);
 		}
 
+		public async Task<IEnumerable<PhoneModel>> GetPhonePageAsync(string page)
+		{
+			string sql = "exec [_spGetPhonePage] @Page";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, PhoneModel>(sql, new { Page = page }, _configuration);
+		}
+
 		public async Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId)
 		{
 			string sql = "exec [_spSellerPhonesById] @Id";

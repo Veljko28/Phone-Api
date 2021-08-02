@@ -16,6 +16,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<IEnumerable<string>> GetPhoneImagesAsync(string phoneId);
 		Task<IEnumerable<PhoneModel>> GetLastestPhonesAsync();
 		Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync();
+		Task<IEnumerable<PhoneModel>> GetPhonePageAsync(string page);
 
 	}
 
