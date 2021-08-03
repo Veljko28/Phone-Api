@@ -23,22 +23,23 @@ namespace Phone_Api.Repository
 			_configuration = configuration;
 		}
 
-		public async Task<BidModel> AddBidAsync(BidRequest req)
+		public async Task<BidModel> AddBidAsync(BidRequest req, string userId)
 		{
 			BidModel model = new BidModel
 			{
 				Id = Guid.NewGuid().ToString(),
 				Name = req.Name,
+				Image = req.Image,
 				Description = req.Description,
 				Price = req.Price,
 				Brand = req.Brand,
 				Category = req.Category,
-				Seller = req.Seller,
+				Seller = userId,
 				TimeCreated = req.TimeCreated,
 				TimeEnds = req.TimeEnds
 			};
 
-			string sql = "exec [_spAddBid] @Id, @Name, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
+			string sql = "exec [_spAddBid] @Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -89,6 +90,20 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spGetUserBids] @Id";
 
 			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new { Id = userId }, _configuration);
+		}
+
+		public async Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId)
+		{
+			string sql = "exec [_spGetBidPage] @Page";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new { Page = pageId }, _configuration);
+		}
+
+		public async Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id)
+		{
+			string sql = "exec [_spGetBidImages] @Id";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { Id = bid_Id }, _configuration);
 		}
 	}
 }

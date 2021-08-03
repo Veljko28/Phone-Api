@@ -11,10 +11,12 @@ namespace Phone_Api.Repository.Interfaces
 {
 	public interface IBidRepository
 	{
-		Task<BidModel> AddBidAsync(BidRequest req);
+		Task<BidModel> AddBidAsync(BidRequest req, string userId);
 		Task<BidRequest> GetBidByIdAsync(string bid_Id);
 		Task<IEnumerable<BidHistoryModel>> GetBidHistoriesAsync(string bid_Id);
 		Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req);
 		Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId);
+		Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId);
+		Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id);
 	}
 }
