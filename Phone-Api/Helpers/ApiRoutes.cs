@@ -91,7 +91,7 @@ namespace Phone_Api.Helpers
 		{
 			public const string type = "/bid";
 
-			public const string AddBid = root + version + type + "/add";
+			public const string AddBid = root + version + type + "/add/{userId}";
 
 			public const string BidById = root + version + type + "/{bid_Id}";
 
@@ -100,6 +100,11 @@ namespace Phone_Api.Helpers
 			public const string AddHistory = root + version + type +  "/addhistory";
 
 			public const string BidHistories = root + version + type +  "/histories/{bid_Id}";
+
+			public const string GetPage = root + version + type + "/page" + "/{pageId}";
+
+			public const string GetImages = root + version + type + "/images" + "/{bid_Id}";
+
 		}
 
 	}

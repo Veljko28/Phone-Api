@@ -32,9 +32,9 @@ namespace Phone_Api.Controllers
 		}
 
 		[HttpPost(ApiRoutes.BidRoutes.AddBid)]
-		public async Task<IActionResult> AddBid([FromBody] BidRequest req)
+		public async Task<IActionResult> AddBid([FromBody] BidRequest req, [FromRoute] string userId)
 		{
-			var result = await _bids.AddBidAsync(req);
+			var result = await _bids.AddBidAsync(req, userId);
 
 			return genericResponse(result, "Error while creating the phone");
 		}
@@ -89,7 +89,30 @@ namespace Phone_Api.Controllers
 
 			return Ok(result);
 		}
+		
+		[AllowAnonymous]
+		[HttpGet(ApiRoutes.BidRoutes.GetPage)]
+		public async Task<IActionResult> GetPage([FromRoute] string pageId)
+		{
+			var phones = await _bids.GetBidPageAsync(pageId);
 
+			if (phones == null || phones.Count() == 0)
+			{
+				return BadRequest("Failed to find any bids");
+			}
+
+			return Ok(phones);
+		}
+
+		[AllowAnonymous]
+		[HttpGet(ApiRoutes.BidRoutes.GetImages)]
+		public async Task<IActionResult> GetImages([FromRoute] string bid_Id)
+		{
+			var phones = await _bids.GetBidImagesAsync(bid_Id);
+
+			return genericResponse(phones, "Cannot find any images for this phone");
+
+		}
 
 	}
 }

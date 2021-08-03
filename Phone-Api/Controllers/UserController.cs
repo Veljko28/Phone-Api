@@ -69,7 +69,7 @@ namespace Phone_Api.Controllers
 		}
 
 
-		[HttpPatch(ApiRoutes.UserRoutes.Refresh)]
+		[HttpPost(ApiRoutes.UserRoutes.Refresh)]
 
 		public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
 		{
