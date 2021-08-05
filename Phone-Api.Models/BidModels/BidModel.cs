@@ -16,6 +16,6 @@ namespace Phone_Api.Models
 		public string Brand { get; set; }
 		public DateTime TimeCreated { get; set; }
 		public DateTime TimeEnds { get; set; }
-
+		public BidStatus Status { get; set; }
 	}
 }

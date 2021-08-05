@@ -14,5 +14,7 @@ namespace Phone_Api.Models
 		public string Seller { get; set; }
 		public string Category { get; set; }
 		public string Brand { get; set; }
+		public PhoneStatus Status { get; set; }
+
 	}
 }
