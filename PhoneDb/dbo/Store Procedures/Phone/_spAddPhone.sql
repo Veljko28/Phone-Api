@@ -6,8 +6,10 @@
 	@Description NVARCHAR(256),
 	@Name NVARCHAR(100),
 	@Category NVARCHAR(50),
-	@Brand NVARCHAR(25)
+	@Brand NVARCHAR(25),
+	@Status int
 AS
 begin
-	INSERT INTO [dbo].[Phones] (Id, [Image], Seller, Price, [Description], [Name], Category, Brand) VALUES (@Id, @Image, @Seller, @Price, @Description, @Name, @Category, @Brand);
+	INSERT INTO [dbo].[Phones] (Id, [Image], Seller, Price, [Description], [Name], Category, Brand, [Status]) 
+	VALUES (@Id, @Image, @Seller, @Price, @Description, @Name, @Category, @Brand, @Status);
 end
