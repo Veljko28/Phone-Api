@@ -8,6 +8,7 @@
     [Seller] NVARCHAR(50) NOT NULL, 
     [Category] NVARCHAR(50) NOT NULL, 
     [Brand] NVARCHAR(25) NOT NULL, 
-    [Price] MONEY NOT NULL,
+    [Price] MONEY NOT NULL, 
+    [Status] nvarchar(50) NULL,
 
 )

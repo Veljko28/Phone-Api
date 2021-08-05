@@ -9,5 +9,6 @@
 	[Category] NVARCHAR(50) NOT NULL,
 	[Seller] NVARCHAR(50) NOT NULL,
 	[TimeCreated] DATETIME2(7) NOT NULL DEFAULT getutcdate(),
-	[TimeEnds] DATETIME2(7) NOT NULL
+	[TimeEnds] DATETIME2(7) NOT NULL, 
+    [Status] nvarchar(50) NULL
 )
