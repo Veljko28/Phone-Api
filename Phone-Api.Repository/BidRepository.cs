@@ -36,10 +36,11 @@ namespace Phone_Api.Repository
 				Category = req.Category,
 				Seller = userId,
 				TimeCreated = req.TimeCreated,
-				TimeEnds = req.TimeEnds
+				TimeEnds = req.TimeEnds,
+				Status = BidStatus.Running
 			};
 
-			string sql = "exec [_spAddBid] @Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds";
+			string sql = "exec [_spAddBid] @Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds, @Status";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -104,6 +105,13 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spGetBidImages] @Id";
 
 			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { Id = bid_Id }, _configuration);
+		}
+
+		public async Task<GenericResponse> DeleteBidAsync(string bid_Id)
+		{
+			string sql = "exec [_spDeleteBid] @Id";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = bid_Id }, _configuration, "Failed to delete the bid");
 		}
 	}
 }

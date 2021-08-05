@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
@@ -32,11 +33,11 @@ namespace Phone_Api.Repository
 				Description = phoneRequest.Description,
 				Name = phoneRequest.Name,
 				Category = phoneRequest.Category,
-				Brand = phoneRequest.Brand
-
+				Brand = phoneRequest.Brand,
+				Status = PhoneStatus.Running
 			};
 
-			string sql = "exec [_spAddPhone] @Id, @Image, @Seller, @Price, @Description, @Name, @Category, @Brand";
+			string sql = "exec [_spAddPhone] @Id, @Image, @Seller, @Price, @Description, @Name, @Category, @Brand, @Status";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection") ))
 			{
@@ -51,6 +52,13 @@ namespace Phone_Api.Repository
 			}
 
 			return null;
+		}
+
+		public async Task<GenericResponse> DeletePhoneAsync(string phoneId)
+		{
+			string sql = "exec [_spDeletePhone] @Id";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = phoneId }, _configuration, "Failed to delete the phone");
 		}
 
 		public async Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync()

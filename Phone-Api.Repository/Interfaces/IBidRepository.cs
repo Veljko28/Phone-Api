@@ -18,5 +18,6 @@ namespace Phone_Api.Repository.Interfaces
 		Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId);
 		Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId);
 		Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id);
+		Task<GenericResponse> DeleteBidAsync(string bid_Id);
 	}
 }
