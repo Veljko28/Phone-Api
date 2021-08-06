@@ -114,5 +114,18 @@ namespace Phone_Api.Controllers
 
 		}
 
+		[HttpDelete(ApiRoutes.BidRoutes.Delete)]
+		public async Task<IActionResult> Delete([FromRoute] string bid_Id)
+		{
+			var phone = await _bids.DeleteBidAsync(bid_Id);
+
+			if (phone.Success)
+			{
+				return Ok();
+			}
+
+			return BadRequest(phone.ErrorMessage);
+		}
+
 	}
 }

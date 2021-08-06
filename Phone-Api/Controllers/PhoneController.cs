@@ -93,5 +93,19 @@ namespace Phone_Api.Controllers
 			return genericResponse(phones, "failed to get latest phones");
 
 		}
+
+
+		[HttpDelete(ApiRoutes.PhoneRoutes.Delete)]
+		public async Task<IActionResult> Delete([FromRoute] string pageId)
+		{
+			var phone = await _phones.DeletePhoneAsync(pageId);
+
+			if (phone.Success)
+			{
+				return Ok();
+			}
+
+			return BadRequest(phone.ErrorMessage);
+		}
 	}
 }

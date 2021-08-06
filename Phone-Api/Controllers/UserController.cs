@@ -20,14 +20,6 @@ namespace Phone_Api.Controllers
 			_users = users;
 		}
 
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		[HttpGet("/hello")]
-		public IActionResult Hello()
-		{
-			return Ok("hello");
-		}
-
-
 		[HttpPost(ApiRoutes.UserRoutes.Register)]
 		public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
 		{
