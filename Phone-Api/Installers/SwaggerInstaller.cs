@@ -17,7 +17,7 @@ namespace Phone_Api.Installers
 				options.AddDefaultPolicy(
 					builder =>
 					{
-						builder.AllowAnyOrigin().AllowAnyHeader();
+						builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 					});
 			});
 
