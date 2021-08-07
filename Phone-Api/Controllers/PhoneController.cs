@@ -113,6 +113,7 @@ namespace Phone_Api.Controllers
 			return BadRequest(phone.ErrorMessage);
 		}
 
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPatch(ApiRoutes.PhoneRoutes.Edit)]
 		public async Task<IActionResult> Edit([FromBody] EditModel editModel)
 		{

@@ -34,7 +34,7 @@ namespace Phone_Api.Repository.Helpers
 					ValidateIssuer = false,
 					ValidateAudience = false,
 					RequireExpirationTime = false,
-					ValidateLifetime = true
+					ValidateLifetime = false
 				};
 
 				var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
