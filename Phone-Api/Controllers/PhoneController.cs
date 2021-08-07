@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Phone_Api.Helpers;
+using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Repository.Interfaces;
 using System;
@@ -14,10 +17,12 @@ namespace Phone_Api.Controllers
 	public class PhoneController : Controller
 	{
 		private readonly IPhoneRepository _phones;
+		private readonly IConfiguration _configuration;
 
-		public PhoneController(IPhoneRepository phones)
+		public PhoneController(IPhoneRepository phones, IConfiguration configuration)
 		{
 			_phones = phones;
+			_configuration = configuration;
 		}
 
 		private IActionResult genericResponse<T>(T success, string error)
@@ -96,9 +101,38 @@ namespace Phone_Api.Controllers
 
 
 		[HttpDelete(ApiRoutes.PhoneRoutes.Delete)]
-		public async Task<IActionResult> Delete([FromRoute] string pageId)
+		public async Task<IActionResult> Delete([FromRoute] string phoneId)
 		{
-			var phone = await _phones.DeletePhoneAsync(pageId);
+			var phone = await _phones.DeletePhoneAsync(phoneId);
+
+			if (phone.Success)
+			{
+				return Ok();
+			}
+
+			return BadRequest(phone.ErrorMessage);
+		}
+
+		[HttpPatch(ApiRoutes.PhoneRoutes.Edit)]
+		public async Task<IActionResult> Edit([FromBody] EditModel editModel)
+		{
+			var phone = await _phones.EditPhoneAsync(editModel.Model);
+
+			IEnumerable<string> Images = await _phones.GetPhoneImagesAsync(editModel.Model.Id);
+
+			foreach (string image in Images)
+			{
+				if (!editModel.Images.Contains(image))
+				{
+					bool removed = await GenericController.RemoveImage(image, editModel.Model.Id, _configuration);
+
+					if (!removed)
+					{
+						return BadRequest("Failed to remove one of the images");
+					}
+				}
+			}
+
 
 			if (phone.Success)
 			{

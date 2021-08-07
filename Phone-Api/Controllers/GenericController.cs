@@ -276,5 +276,12 @@ namespace Phone_Api.Controllers
 
             return Ok(model);
 		}
+
+        public static async Task<bool> RemoveImage(string imagePath, string phoneId, IConfiguration _configuration)
+		{
+            string sql = "exec [_spRemovePhoneImage] @ImagePath, @PhoneId";
+
+            return (await DatabaseOperations.GenericExecute(sql, new { ImagePath = imagePath, PhoneId = phoneId }, _configuration, "Failed to remove the image")).Success;
+		}
     }
 }
