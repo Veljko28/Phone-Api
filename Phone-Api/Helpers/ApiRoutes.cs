@@ -27,7 +27,9 @@ namespace Phone_Api.Helpers
 
 			public const string GetPage = root + version + type + "/page" + "/{pageId}";
 
-			public const string Delete = root + version + type + "/delete" + "/{pageId}";
+			public const string Delete = root + version + type + "/delete" + "/{phoneId}";
+			
+			public const string Edit = root + version + type + "/edit";
 
 		}
 		public static class UserRoutes
@@ -107,7 +109,7 @@ namespace Phone_Api.Helpers
 			public const string GetImages = root + version + type + "/images" + "/{bid_Id}";
 
 			public const string Delete = root + version + type + "/delete" + "/{bid_Id}";
-
+			
 		}
 
 	}
