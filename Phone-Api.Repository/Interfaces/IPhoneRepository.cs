@@ -19,6 +19,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync();
 		Task<IEnumerable<PhoneModel>> GetPhonePageAsync(string page);
 		Task<GenericResponse> DeletePhoneAsync(string phoneId);
+		Task<GenericResponse> EditPhoneAsync(PhoneModel model);
 
 	}
 

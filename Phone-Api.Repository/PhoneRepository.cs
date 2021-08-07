@@ -61,6 +61,13 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericExecute(sql, new { Id = phoneId }, _configuration, "Failed to delete the phone");
 		}
 
+		public async Task<GenericResponse> EditPhoneAsync(PhoneModel model)
+		{
+			string sql = "exec [_spEditPhone] @Id, @Image, @Name, @Description, @Price, @Seller, @Category, @DateCreated, @Brand, @Status";
+
+			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to update the phone");
+		}
+
 		public async Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync()
 		{
 			string sql = "SELECT TOP 4 * FROM [dbo].[Phones] ORDER BY NEWID()";
