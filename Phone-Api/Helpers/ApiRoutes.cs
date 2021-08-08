@@ -109,7 +109,9 @@ namespace Phone_Api.Helpers
 			public const string GetImages = root + version + type + "/images" + "/{bid_Id}";
 
 			public const string Delete = root + version + type + "/delete" + "/{bid_Id}";
-			
+
+			public const string UpdatePrice = root + version + type + "/price" + "/update";
+
 		}
 
 	}
