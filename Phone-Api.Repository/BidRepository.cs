@@ -79,11 +79,11 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQueryList<dynamic, BidHistoryModel>(sql, new { Id = bid_Id }, _configuration);
 		}
 
-		public async Task<BidRequest> GetBidByIdAsync(string bid_Id)
+		public async Task<BidModel> GetBidByIdAsync(string bid_Id)
 		{
 			string sql = "exec [_spGetBidById] @Id";
 
-			return await DatabaseOperations.GenericQuerySingle<dynamic, BidRequest>(sql, new { Id = bid_Id }, _configuration);
+			return await DatabaseOperations.GenericQuerySingle<dynamic, BidModel>(sql, new { Id = bid_Id }, _configuration);
 		}
 
 		public async Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId)
@@ -112,6 +112,13 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spDeleteBid] @Id";
 
 			return await DatabaseOperations.GenericExecute(sql, new { Id = bid_Id }, _configuration, "Failed to delete the bid");
+		}
+
+		public async Task<GenericResponse> UpdatePriceAsync(BidPriceUpdateRequest req)
+		{
+			string sql = "exec [_spUpdateBidPrice] @Id, @Price";
+
+			return await DatabaseOperations.GenericExecute(sql, req, _configuration, "Failed to update the price");
 		}
 	}
 }
