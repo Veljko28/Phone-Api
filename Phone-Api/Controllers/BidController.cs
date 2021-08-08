@@ -127,5 +127,19 @@ namespace Phone_Api.Controllers
 			return BadRequest(phone.ErrorMessage);
 		}
 
+
+		[HttpPatch(ApiRoutes.BidRoutes.UpdatePrice)]
+		public async Task<IActionResult> UpdatePrice([FromBody] BidPriceUpdateRequest req)
+		{
+			var phone = await _bids.UpdatePriceAsync(req);
+
+			if (phone.Success)
+			{
+				return Ok();
+			}
+
+			return BadRequest(phone.ErrorMessage);
+		}
+
 	}
 }
