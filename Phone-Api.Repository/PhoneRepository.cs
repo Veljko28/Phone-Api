@@ -125,15 +125,15 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQueryList<dynamic, PhoneModel>(sql, new { Page = page }, _configuration);
 		}
 
-		public async Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId)
+		public async Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId, int pageNum)
 		{
-			string sql = "exec [_spSellerPhonesById] @Id";
+			string sql = "exec [_spSellerPhonesById] @Id, @Page";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
 				await db.OpenAsync();
 
-				var phones = await db.QueryAsync<PhoneModel>(sql, new { Id = sellerId});
+				var phones = await db.QueryAsync<PhoneModel>(sql, new { Id = sellerId, Page = pageNum});
 
 				return phones;
 			}
