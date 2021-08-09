@@ -21,7 +21,7 @@ namespace Phone_Api.Helpers
 
 			public const string Latest = root + version + type + "/latest";
 
-			public const string GetSellerPhones = root + version + type + "/seller" + "/{sellerId}";
+			public const string GetSellerPhones = root + version + type + "/seller" + "/{sellerId}/{pageNum}";
 
 			public const string GetImages = root + version + type + "/images" + "/{phoneId}";
 

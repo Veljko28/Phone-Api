@@ -54,9 +54,9 @@ namespace Phone_Api.Controllers
 		}
 
 		[HttpGet(ApiRoutes.PhoneRoutes.GetSellerPhones)]
-		public async Task<IActionResult> GetSellerPhones([FromRoute] string sellerId)
+		public async Task<IActionResult> GetSellerPhones([FromRoute] string sellerId, [FromRoute] int pageNum)
 		{
-			var phones = await _phones.GetSellerPhonesByIdAsync(sellerId);
+			var phones = await _phones.GetSellerPhonesByIdAsync(sellerId, pageNum);
 
 			return genericResponse(phones,"Cannot find any phones for this user");
 
