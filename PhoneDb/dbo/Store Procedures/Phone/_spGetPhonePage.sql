@@ -7,6 +7,6 @@ begin
                   , *
             FROM [dbo].[Phones]
     ) AS tbl 
-    WHERE (@Page-1)*15 < RoNum
+    WHERE (@Page-1)*10 < RoNum
     ORDER BY tbl.Id
 end
