@@ -115,69 +115,6 @@ namespace Phone_Api.Controllers
             }
         }
 
-
-        public async Task<bool> UserImageUploadFunc(string sql, FormUpload upload, string Id)
-        {
-            try
-            {
-                if (upload.Files.Length > 0)
-                {
-                    if (!Directory.Exists(environment.WebRootPath + "\\Uploads\\"))
-                    {
-                        Directory.CreateDirectory(environment.WebRootPath + "\\Uploads\\");
-                    }
-
-                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + upload.Files.FileName))
-                    {
-                        await upload.Files.CopyToAsync(fileStream);
-
-                        await fileStream.FlushAsync();
-
-                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.Files.FileName;
-
-                        using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-                        {
-                            await db.OpenAsync();
-
-                            int rowsModified = await db.ExecuteAsync(sql, new { Id, Image = imagePath });
-
-                            if (rowsModified == 0) return false;
-
-
-                            return true;
-                        }
-
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
-
-        [HttpPost(ApiRoutes.GenericRoutes.UserImageUpload)]
-        public async Task<IActionResult> UserImageUpload([FromForm] FormUpload upload, [FromForm] string Id)
-        {
-            string sql = "exec [_spUserImageUpload] @Id, @Image";
-
-            var succeded = await UserImageUploadFunc(sql, upload, Id);
-
-            if (succeded)
-			{
-                return Ok("Successfully added your image");
-			}
-
-            return BadRequest("Failed to add your image");
-        }
-
-
         [HttpPost(ApiRoutes.GenericRoutes.PhoneBidImageUpload)]
         public async Task<IActionResult> PhoneImageUpload([FromForm] IList<IFormFile> Files, [FromForm] UploadRequest req)
 		{
