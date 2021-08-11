@@ -3,7 +3,7 @@
     @Page int
 AS
 begin
-	SELECT * FROM (
+	SELECT TOP 8 * FROM (
             SELECT ROW_NUMBER() OVER(ORDER BY Id) AS RoNum
                   , *
             FROM [dbo].[Phones] WHERE Seller = @Id

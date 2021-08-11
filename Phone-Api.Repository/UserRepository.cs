@@ -272,5 +272,11 @@ namespace Phone_Api.Repository
 				});
 			}
 
+		public async Task<GenericResponse> EditUserProfileAsync(string userId, EditProfileModel model)
+		{
+			string sql = "exec [_spEditUserProfile] @Id, @UserName, @Email, @Description";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = userId, model.UserName, model.Email, model.Description }, _configuration, "Failed to update the profile");
+		}
 	}
 }
