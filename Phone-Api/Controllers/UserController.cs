@@ -101,5 +101,19 @@ namespace Phone_Api.Controllers
 			return Ok(userResponse);
 		}
 
+		[HttpPost(ApiRoutes.UserRoutes.EditUserProfile)]
+
+		public async Task<IActionResult> EditUserProfile([FromRoute] string userId, [FromBody] EditProfileModel model)
+		{
+			var response = await _users.EditUserProfileAsync(userId, model);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
+			}
+
+			return Ok();
+		}
+
 	}
 }

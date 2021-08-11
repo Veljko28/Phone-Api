@@ -46,6 +46,8 @@ namespace Phone_Api.Helpers
 
 			public const string GetUserById = root + version + type + "/{userId}";
 
+			public const string EditUserProfile = root + version + type + "/edit/{userId}";
+
 		}
 
 		public static class WishlistRoutes
