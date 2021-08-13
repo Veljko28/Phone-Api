@@ -7,7 +7,6 @@ namespace Phone_Api.Models.Responses
 	public class UserResponse
 	{
 		public string Id { get; set; }
-		public string Image { get; set; }
 		public string Email { get; set; }
 		public string UserName { get; set; }
 		public string Description { get; set; }
