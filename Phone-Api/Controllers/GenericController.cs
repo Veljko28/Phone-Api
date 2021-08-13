@@ -16,6 +16,7 @@ using Phone_Api.Repository.Helpers;
 using Phone_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Phone_Api.Models.Responses;
 
 namespace Phone_Api.Controllers
 {
@@ -219,6 +220,31 @@ namespace Phone_Api.Controllers
             string sql = "exec [_spRemovePhoneImage] @ImagePath, @PhoneId";
 
             return (await DatabaseOperations.GenericExecute(sql, new { ImagePath = imagePath, PhoneId = phoneId }, _configuration, "Failed to remove the image")).Success;
+		}
+
+        [HttpPost(ApiRoutes.GenericRoutes.AddReview)]
+        public async Task<IActionResult> AddReview([FromBody] ReviewRequestModel model)
+		{
+            ReviewModel review = new ReviewModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Message = model.Message,
+                Rating = model.Rating,
+                UserId = model.UserId,
+                PhoneId = model.PhoneId,
+                DateCreated = model.DateCreated
+            };
+
+            string sql = "exec [_spAddReview] @Id, @Message, @Rating, @UserId, @PhoneId, @DateCreated";
+
+            GenericResponse res = await DatabaseOperations.GenericExecute(sql, review, _configuration, "Failed to add the review");
+
+            if (res.Success)
+			{
+                return Ok();
+			}
+
+            return BadRequest(res.ErrorMessage);
 		}
     }
 }
