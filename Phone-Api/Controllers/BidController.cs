@@ -49,7 +49,14 @@ namespace Phone_Api.Controllers
 				return BadRequest(result.ErrorMessage);
 			}
 
-			return Ok(result.Success);
+			var phone = await _bids.UpdatePriceAsync(new BidPriceUpdateRequest {Id = req.Bid_Id, Price = req.Amount });
+
+			if (!phone.Success)
+			{
+				return BadRequest(phone.ErrorMessage);
+			}
+
+			return Ok(true);
 		}
 
 		[AllowAnonymous]
@@ -57,11 +64,6 @@ namespace Phone_Api.Controllers
 		public async Task<IActionResult> BidHistories([FromRoute] string bid_Id)
 		{
 			var results = await _bids.GetBidHistoriesAsync(bid_Id);
-
-			if (!results.Any())
-			{
-				return BadRequest("The history is empty");
-			}
 
 			return Ok(results);
 		}
@@ -118,20 +120,6 @@ namespace Phone_Api.Controllers
 		public async Task<IActionResult> Delete([FromRoute] string bid_Id)
 		{
 			var phone = await _bids.DeleteBidAsync(bid_Id);
-
-			if (phone.Success)
-			{
-				return Ok();
-			}
-
-			return BadRequest(phone.ErrorMessage);
-		}
-
-
-		[HttpPatch(ApiRoutes.BidRoutes.UpdatePrice)]
-		public async Task<IActionResult> UpdatePrice([FromBody] BidPriceUpdateRequest req)
-		{
-			var phone = await _bids.UpdatePriceAsync(req);
 
 			if (phone.Success)
 			{
