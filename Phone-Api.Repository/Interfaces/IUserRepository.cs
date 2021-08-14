@@ -16,5 +16,6 @@ namespace Phone_Api.Repository.Interfaces
 		Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change);
 		Task<TokenResponse> RefreshTokenAsync(string token, string refreshToken);
 		Task<GenericResponse> EditUserProfileAsync(string userId, EditProfileModel model);
+		Task<string> GetUserNameById(string userId);
 	}
 }

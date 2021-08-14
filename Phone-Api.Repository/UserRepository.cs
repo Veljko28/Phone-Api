@@ -40,7 +40,7 @@ namespace Phone_Api.Repository
 
 		public async Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change)
 		{
-			if (change.Old_Password != change.Confirm_Old_Password)
+			if (change.Current_Password != change.Confirm_Current_Password)
 				return new GenericResponse
 				{
 					Success = false,
@@ -59,7 +59,7 @@ namespace Phone_Api.Repository
 
 				string dbPassword = user.Password;
 
-				if (!PasswordHashing.ComparePasswords(dbPassword, change.Old_Password))
+				if (!PasswordHashing.ComparePasswords(dbPassword, change.Current_Password))
 						return new GenericResponse { Success = false, ErrorMessage = "Incorrect Password !" };
 
 				string passwordHash = PasswordHashing.HashPassword(change.New_Password);
@@ -277,6 +277,13 @@ namespace Phone_Api.Repository
 			string sql = "exec [_spEditUserProfile] @Id, @UserName, @Email, @Description";
 
 			return await DatabaseOperations.GenericExecute(sql, new { Id = userId, model.UserName, model.Email, model.Description }, _configuration, "Failed to update the profile");
+		}
+
+		public async Task<string> GetUserNameById(string userId)
+		{
+			string sql = "exec [_spGetUserNameById] @Id";
+
+			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { Id = userId }, _configuration);
 		}
 	}
 }
