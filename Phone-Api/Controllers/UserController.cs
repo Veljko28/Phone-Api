@@ -91,7 +91,6 @@ namespace Phone_Api.Controllers
 			{
 				Id = response.Id,
 				Email = response.Email,
-				Image = response.Image,
 				UserName = response.UserName,
 				Description = response.Description,
 				Contanct = response.Contanct,
@@ -99,6 +98,20 @@ namespace Phone_Api.Controllers
 			};
 
 			return Ok(userResponse);
+		}
+
+		[HttpGet(ApiRoutes.UserRoutes.GetUserNameById)]
+
+		public async Task<IActionResult> GetUserNameById([FromRoute] string userId)
+		{
+			var response = await _users.GetUserNameById(userId);
+			
+			if (response == null)
+			{
+				return NotFound("Failed to find user with id " + userId);
+			}
+
+			return Ok(response);
 		}
 
 		[HttpPost(ApiRoutes.UserRoutes.EditUserProfile)]

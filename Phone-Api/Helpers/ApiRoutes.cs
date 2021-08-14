@@ -28,7 +28,9 @@ namespace Phone_Api.Helpers
 			public const string GetPage = root + version + type + "/page" + "/{pageId}";
 
 			public const string Delete = root + version + type + "/delete" + "/{phoneId}";
-			
+
+			public const string Reviews = root + version + type + "/reviews" + "/{phoneId}";
+
 			public const string Edit = root + version + type + "/edit";
 
 		}
@@ -47,6 +49,9 @@ namespace Phone_Api.Helpers
 			public const string GetUserById = root + version + type + "/{userId}";
 
 			public const string EditUserProfile = root + version + type + "/edit/{userId}";
+
+			public const string GetUserNameById = root + version + type + "/username/{userId}";
+
 
 		}
 
@@ -77,6 +82,8 @@ namespace Phone_Api.Helpers
 			public const string Subscribe = root + version + type + "/subscribe";
 
 			public const string Search = root + version + type + "/search/{term}";
+
+			public const string AddReview = root + version + type + "/review";
 
 		}
 
@@ -112,7 +119,6 @@ namespace Phone_Api.Helpers
 
 			public const string Delete = root + version + type + "/delete" + "/{bid_Id}";
 
-			public const string UpdatePrice = root + version + type + "/price" + "/update";
 
 		}
 
