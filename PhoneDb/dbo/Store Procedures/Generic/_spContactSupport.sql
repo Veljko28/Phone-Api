@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[_spContactSupport]
 	@Id NVARCHAR(50),
-    @Name NVARCHAR(100),
+    @Name NVARCHAR(150),
     @Email NVARCHAR(150),
     @Subject NVARCHAR(100), 
     @Message NVARCHAR(MAX)
