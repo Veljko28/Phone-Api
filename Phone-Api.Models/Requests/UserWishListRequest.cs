@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Phone_Api.Models.Requests
 {
-	public class WishListRequest
+	public class UserWishListRequest
 	{
 		public string UserId { get; set; }
-		public string PhoneId { get; set; }
 		public string Type { get; set; }
 	}
 }

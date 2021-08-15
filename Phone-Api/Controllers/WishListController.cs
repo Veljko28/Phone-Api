@@ -50,10 +50,10 @@ namespace Phone_Api.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpGet(ApiRoutes.WishlistRoutes.GetUserWishes)]
-		public async Task<IActionResult> GetUserWishes([FromRoute] string userId)
+		[HttpPost(ApiRoutes.WishlistRoutes.GetUserWishes)]
+		public async Task<IActionResult> GetUserWishes([FromBody] UserWishListRequest model)
 		{
-			var result = await _wishList.GetUserWishesAsync(userId);
+			var result = await _wishList.GetUserWishesAsync(model);
 
 			if (!result.Any())
 			{
