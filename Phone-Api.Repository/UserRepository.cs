@@ -195,7 +195,7 @@ namespace Phone_Api.Repository
 				Id = Guid.NewGuid().ToString(),
 				Email = userRequest.Email,
 				Password = passwordHash,
-				UserName = userRequest.UserName
+				UserName = userRequest.UserName,
 			};
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -274,9 +274,9 @@ namespace Phone_Api.Repository
 
 		public async Task<GenericResponse> EditUserProfileAsync(string userId, EditProfileModel model)
 		{
-			string sql = "exec [_spEditUserProfile] @Id, @UserName, @Email, @Description";
+			string sql = "exec [_spEditUserProfile] @Id, @UserName, @Email, @Description, @PhoneNumber";
 
-			return await DatabaseOperations.GenericExecute(sql, new { Id = userId, model.UserName, model.Email, model.Description }, _configuration, "Failed to update the profile");
+			return await DatabaseOperations.GenericExecute(sql, new { Id = userId, model.UserName, model.Email, model.Description, model.PhoneNumber }, _configuration, "Failed to update the profile");
 		}
 
 		public async Task<string> GetUserNameById(string userId)

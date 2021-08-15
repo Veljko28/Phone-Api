@@ -6,5 +6,5 @@
     [Expires] DATETIME2 NOT NULL, 
     [Used] BIT NOT NULL, 
     [Invalidated] BIT NOT NULL, 
-    [UserId] NVARCHAR(MAX) NOT NULL
+    [UserId] NVARCHAR(50) NOT NULL
 )
