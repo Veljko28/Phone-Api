@@ -63,7 +63,7 @@ namespace Phone_Api.Helpers
 
 			public const string RemoveFromWishList = root + version + type + "/remove/{wishId}";
 
-			public const string GetUserWishes = root + version + type + "/get/{userId}";
+			public const string GetUserWishes = root + version + type + "/get";
 
 		}
 
@@ -101,7 +101,7 @@ namespace Phone_Api.Helpers
 
 		public static class BidRoutes
 		{
-			public const string type = "/bid";
+			public const string type = "/bids";
 
 			public const string AddBid = root + version + type + "/add/{userId}";
 

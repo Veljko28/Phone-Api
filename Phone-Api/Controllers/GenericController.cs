@@ -41,6 +41,10 @@ namespace Phone_Api.Controllers
         [HttpPost(ApiRoutes.GenericRoutes.PhoneDisplay)]
         public async Task<IActionResult> PhoneDisplay(FormUpload upload)
         {
+            string filePath = Guid.NewGuid().ToString();
+            string extention = upload.Files.FileName.Split('.')[1];
+            string guidedFile = filePath + "." + extention;
+
             try
             {
                 if (upload.Files.Length > 0)
@@ -50,13 +54,13 @@ namespace Phone_Api.Controllers
                         Directory.CreateDirectory(environment.WebRootPath + "\\Uploads\\");
                     }
 
-                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + upload.Files.FileName))
+                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + guidedFile))
                     {
                         await upload.Files.CopyToAsync(fileStream);
 
                         await fileStream.FlushAsync();
 
-                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.Files.FileName;
+                        string imagePath = "http://localhost:10025" + "/Uploads/" + guidedFile;
 
                         return Ok(imagePath);
                     }
@@ -74,6 +78,10 @@ namespace Phone_Api.Controllers
 
         public async Task<bool> ImageUploadFunc(string sql, IFormFile upload, UploadRequest req)
 		{
+            string filePath = Guid.NewGuid().ToString();
+            string extention = upload.FileName.Split('.')[1];
+            string guidedFile = filePath + "." + extention;
+
             try
             {
                 if (upload.Length > 0)
@@ -83,13 +91,13 @@ namespace Phone_Api.Controllers
                         Directory.CreateDirectory(environment.WebRootPath + "\\Uploads\\");
                     }
 
-                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + upload.FileName))
+                    using (FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Uploads\\" + guidedFile))
                     {
                         await upload.CopyToAsync(fileStream);
 
                         await fileStream.FlushAsync();
 
-                        string imagePath = "http://localhost:10025" + "/Uploads/" + upload.FileName;
+                        string imagePath = "http://localhost:10025" + "/Uploads/" + guidedFile;
 
                         using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                         {
