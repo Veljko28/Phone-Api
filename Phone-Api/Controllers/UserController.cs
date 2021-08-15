@@ -93,7 +93,7 @@ namespace Phone_Api.Controllers
 				Email = response.Email,
 				UserName = response.UserName,
 				Description = response.Description,
-				Contanct = response.Contanct,
+				PhoneNumber = response.PhoneNumber,
 				Phones_sold = response.Phones_sold,
 			};
 

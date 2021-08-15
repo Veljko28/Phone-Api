@@ -11,6 +11,6 @@ namespace Phone_Api.Models.Responses
 		public string UserName { get; set; }
 		public string Description { get; set; }
 		public int Phones_sold { get; set; }
-		public string Contanct { get; set; }
+		public string PhoneNumber { get; set; }
 	}
 }
