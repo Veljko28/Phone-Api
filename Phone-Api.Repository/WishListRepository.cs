@@ -28,18 +28,19 @@ namespace Phone_Api.Repository
 			{
 				Id = Guid.NewGuid().ToString(),
 				UserId = model.UserId,
-				PhoneId = model.PhoneId
+				PhoneId = model.PhoneId,
+				Type = model.Type
 			};
 
-			string sql = "exec [_spAddToWishList] @Id, @UserId, @PhoneId";
+			string sql = "exec [_spAddToWishList] @Id, @UserId, @PhoneId, @Type";
 			return await DatabaseOperations.GenericExecute(sql, wish, _configuration, "Failed to insert the item to the wish list");
 		}
 
-		public async Task<IEnumerable<string>> GetUserWishesAsync(string UserId)
+		public async Task<IEnumerable<string>> GetUserWishesAsync(UserWishListRequest model)
 		{
-			string sql = "exec [_spGetUserWishes] @UserId";
+			string sql = "exec [_spGetUserWishes] @UserId, @Type";
 
-			return await DatabaseOperations.GenericQueryList<dynamic,string>(sql, new { UserId }, _configuration);
+			return await DatabaseOperations.GenericQueryList<dynamic,string>(sql, new { model.UserId, model.Type }, _configuration);
 		}
 
 		public async Task<GenericResponse> RemoveFromWishListAsync(string Id)

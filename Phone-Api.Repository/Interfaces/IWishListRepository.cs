@@ -12,6 +12,6 @@ namespace Phone_Api.Repository.Interfaces
 	{
 		Task<GenericResponse> AddToWishListAsync(WishListRequest model);
 		Task<GenericResponse> RemoveFromWishListAsync(string Id);
-		Task<IEnumerable<string>> GetUserWishesAsync(string userId);
+		Task<IEnumerable<string>> GetUserWishesAsync(UserWishListRequest model);
 	}
 }
