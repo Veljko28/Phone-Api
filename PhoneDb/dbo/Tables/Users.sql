@@ -6,6 +6,6 @@
 	[Password] NVARCHAR(256) NOT NULL, 
 	[Description] NVARCHAR(256) NULL,
 	[Rating] INT NULL,
-	[Phones_sold] int NOT NULL DEFAULT 0,
-	[Contact] NVARCHAR(50) NULL,
+	[PhoneNumber] NVARCHAR(100) NULL,
+	[Phones_sold] int NOT NULL DEFAULT 0
 )
