@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
+using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Repository.Interfaces;
 using System;
@@ -16,10 +17,15 @@ namespace Phone_Api.Controllers
 	public class WishListController : Controller
 	{
 		private readonly IWishListRepository _wishList;
+		private readonly IPhoneRepository _phones;
+		private readonly IBidRepository _bids;
 
-		public WishListController(IWishListRepository wishList)
+
+		public WishListController(IWishListRepository wishList, IPhoneRepository phones, IBidRepository bids)
 		{
 			_wishList = wishList;
+			_phones = phones;
+			_bids = bids;
 		}
 
 		[HttpPost(ApiRoutes.WishlistRoutes.AddToWishList)]
@@ -60,7 +66,33 @@ namespace Phone_Api.Controllers
 				return BadRequest("Cannot find any wishes for this user");
 			}
 
-			return Ok(result);
+
+			if (model.Type == "phone")
+			{
+				List<PhoneModel> list = new List<PhoneModel>();
+
+				foreach (var phoneId in result)
+				{
+					PhoneModel phone = await _phones.GetPhoneByIdAsync(phoneId);
+					list.Add(phone);
+				}
+
+				return Ok(list);
+			}
+
+			else
+			{
+				List<BidModel> list = new List<BidModel>();
+
+				foreach (var bid_Id in result)
+				{
+					BidModel bid = await _bids.GetBidByIdAsync(bid_Id);
+					list.Add(bid);
+				}
+
+				return Ok(list);
+			}
+
 		}
 
 
