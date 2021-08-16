@@ -36,7 +36,7 @@ namespace Phone_Api.Controllers
 		{
 			var result = await _bids.AddBidAsync(req, userId);
 
-			return genericResponse(result, "Error while creating the phone");
+			return genericResponse(result, "Error while creating the bid");
 		}
 
 		[HttpPost(ApiRoutes.BidRoutes.AddHistory)]

@@ -36,11 +36,11 @@ namespace Phone_Api.Repository
 				Category = req.Category,
 				Seller = userId,
 				TimeCreated = req.TimeCreated,
-				TimeEnds = req.TimeEnds,
+				Date_Ends = req.Date_Ends,
 				Status = BidStatus.Running
 			};
 
-			string sql = "exec [_spAddBid] @Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds, @Status";
+			string sql = "exec [_spAddBid] @Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @Date_Ends, @Status";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
