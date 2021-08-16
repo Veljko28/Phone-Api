@@ -13,7 +13,7 @@ namespace Phone_Api.Models.Requests.BidRequests
 		public string Category { get; set; }
 		public string Brand { get; set; }
 		public DateTime TimeCreated { get; set; }
-		public DateTime TimeEnds { get; set; }
+		public DateTime Date_Ends { get; set; }
 
 	}
 }
