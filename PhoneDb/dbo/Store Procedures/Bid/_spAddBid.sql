@@ -8,10 +8,10 @@
 	@Category NVARCHAR(50),
 	@Seller NVARCHAR(50),
 	@TimeCreated DATETIME2(7),
-	@TimeEnds DATETIME2(7),
+	@Date_Ends DATETIME2(7),
 	@Status int
 AS
 begin
-	INSERT INTO [dbo].[Bids] (Id, [Name],[Image], [Description], Price, Brand, Category, Seller, TimeCreated, TimeEnds, [Status] )
-	VALUES (@Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @TimeEnds, @Status );
+	INSERT INTO [dbo].[Bids] (Id, [Name],[Image], [Description], Price, Brand, Category, Seller, TimeCreated, Date_Ends, [Status] )
+	VALUES (@Id, @Name, @Image, @Description, @Price, @Brand, @Category, @Seller, @TimeCreated, @Date_Ends, @Status );
 end
