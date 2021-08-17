@@ -61,7 +61,7 @@ namespace Phone_Api.Helpers
 
 			public const string AddToWishList = root + version + type + "/add";
 
-			public const string RemoveFromWishList = root + version + type + "/remove/{wishId}";
+			public const string RemoveFromWishList = root + version + type + "/remove";
 
 			public const string GetUserWishes = root + version + type + "/get";
 
