@@ -43,9 +43,9 @@ namespace Phone_Api.Controllers
 
 
 		[HttpDelete(ApiRoutes.WishlistRoutes.RemoveFromWishList)]
-		public async Task<IActionResult> RemoveFromWishList([FromRoute] string wishId)
+		public async Task<IActionResult> RemoveFromWishList([FromBody] WishListRemoveRequest model)
 		{
-			var result = await _wishList.RemoveFromWishListAsync(wishId);
+			var result = await _wishList.RemoveFromWishListAsync(model.UserId, model.PhoneId);
 
 			if (!result.Success)
 			{
@@ -74,7 +74,11 @@ namespace Phone_Api.Controllers
 				foreach (var phoneId in result)
 				{
 					PhoneModel phone = await _phones.GetPhoneByIdAsync(phoneId);
-					list.Add(phone);
+					if (phone == null)
+					{
+						await _wishList.RemoveFromWishListAsync(model.UserId, phoneId);
+					}
+					else list.Add(phone);
 				}
 
 				return Ok(list);
@@ -87,7 +91,11 @@ namespace Phone_Api.Controllers
 				foreach (var bid_Id in result)
 				{
 					BidModel bid = await _bids.GetBidByIdAsync(bid_Id);
-					list.Add(bid);
+					if (bid == null)
+					{
+						await _wishList.RemoveFromWishListAsync(model.UserId, bid_Id);
+					}
+					else list.Add(bid);
 				}
 
 				return Ok(list);
