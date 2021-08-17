@@ -40,15 +40,14 @@ namespace Phone_Api.Repository
 		{
 			string sql = "exec [_spGetUserWishes] @UserId, @Type";
 
-			return await DatabaseOperations.GenericQueryList<dynamic,string>(sql, new { model.UserId, model.Type }, _configuration);
+			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { model.UserId, model.Type }, _configuration);
 		}
 
-		public async Task<GenericResponse> RemoveFromWishListAsync(string Id)
+		public async Task<GenericResponse> RemoveFromWishListAsync(string UserId, string PhoneId)
 		{
-			string sql = "exec [_spRemoveWish] @Id";
+			string sql = "exec [_spRemoveWish] @UserId, @PhoneId";
 
-			return await DatabaseOperations.GenericExecute(sql, new { Id }, _configuration, "Failed to remove the item from the wish list");
-
+			return await DatabaseOperations.GenericExecute(sql, new {UserId, PhoneId}, _configuration, "Failed to remove the item from the wish list");
 		}
 	}
 }
