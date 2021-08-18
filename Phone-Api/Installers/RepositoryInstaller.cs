@@ -14,7 +14,7 @@ namespace Phone_Api.Installers
 		public void InstallServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<IPhoneRepository, PhoneRepository>();
-			services.AddSingleton<IUserRepository, UserRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();
 
 			services.AddSingleton<IWishListRepository, WishListRepository>();
 			services.AddSingleton<IPurchaseRepository, PurchaseRepository>();
