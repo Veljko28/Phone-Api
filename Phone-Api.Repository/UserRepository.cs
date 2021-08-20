@@ -145,16 +145,12 @@ namespace Phone_Api.Repository
 
 		}
 
-		public async Task<GenericResponse> RegisterAsync(UserRequest userRequest)
+		public async Task<string> RegisterAsync(UserRequest userRequest)
 		{
 			string sql = "exec [_spRegisterUser] @Id, @Email, @UserName, @Password";
 
 			if (userRequest.Confirm_Password != userRequest.Password)
-				return new GenericResponse
-				{
-					Success = false,
-					ErrorMessage = "The Passwords do not match !"
-				};
+				return null;
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -166,11 +162,8 @@ namespace Phone_Api.Repository
 
 				if (EmailInUse != null)
 				{
-					return new GenericResponse
-					{
-						Success = false,
-						ErrorMessage = "This Email is already in use !"
-					};
+					return null;
+
 				}
 
 				// Check if the username is in use
@@ -179,11 +172,7 @@ namespace Phone_Api.Repository
 
 				if (UserNameInUse != null)
 				{
-					return new GenericResponse
-					{
-						Success = false,
-						ErrorMessage = "This Username is already in use !"
-					};
+					return null;
 				}
 
 			}
@@ -206,17 +195,10 @@ namespace Phone_Api.Repository
 
 				if (rowsModified > 0)
 				{
-					return new GenericResponse
-					{
-						Success = true
-					};
+					return user.Id;
 				}
 
-				return new GenericResponse
-				{
-					Success = false,
-					ErrorMessage = "Problem with registering the user"
-				};
+				return null;
 
 			}
 		}

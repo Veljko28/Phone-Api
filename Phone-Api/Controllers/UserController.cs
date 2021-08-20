@@ -24,14 +24,14 @@ namespace Phone_Api.Controllers
 		public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
 		{
 
-			GenericResponse registered = await _users.RegisterAsync(userRequest);
+			string userId = await _users.RegisterAsync(userRequest);
 
-			if (!registered.Success)
+			if (userId == null)
 			{
-				return BadRequest(registered.ErrorMessage);
+				return BadRequest("Failed to register");
 			}
 
-			return Ok("Successfully registered !");
+			return Ok(new { Id = userId });
 		}
 
 		[HttpPost(ApiRoutes.UserRoutes.Login)]
