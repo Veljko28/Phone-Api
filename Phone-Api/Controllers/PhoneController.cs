@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Phone_Api.Controllers
 
 			return Ok(success);
 		}
+
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPost(ApiRoutes.PhoneRoutes.Add)]
 		public async Task<IActionResult> AddPhone([FromBody] PhoneRequest phoneRequest, [FromRoute] string userId)
@@ -43,7 +45,21 @@ namespace Phone_Api.Controllers
 		    return genericResponse(phone, "Error while creating the phone");
 			
 		}
-		
+
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[HttpPost(ApiRoutes.PhoneRoutes.ChangeStatus)]
+		public async Task<IActionResult> ChangeStatus([FromBody] ChangePhoneStatusRequest phoneRequest)
+		{
+			GenericResponse response = await _phones.ChangeStatusAsync(phoneRequest);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
+			}
+
+			return Ok();
+		}
+
 		[HttpGet(ApiRoutes.PhoneRoutes.GetById)]
 		public async Task<IActionResult> GetById([FromRoute] string phoneId)
 		{

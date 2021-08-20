@@ -21,6 +21,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<GenericResponse> DeletePhoneAsync(string phoneId);
 		Task<GenericResponse> EditPhoneAsync(PhoneModel model);
 		Task<IEnumerable<ReviewModel>> GetPhoneReviewsById(string Id);
+		Task<GenericResponse> ChangeStatusAsync(ChangePhoneStatusRequest request);
 
 	}
 

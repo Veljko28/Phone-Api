@@ -54,6 +54,13 @@ namespace Phone_Api.Repository
 			return null;
 		}
 
+		public async Task<GenericResponse> ChangeStatusAsync(ChangePhoneStatusRequest request)
+		{
+			string sql = "exec [_spChangePhoneStatus] @Id, @Status";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = request.PhoneId, request.Status }, _configuration, "Failed to change status");
+		}
+
 		public async Task<GenericResponse> DeletePhoneAsync(string phoneId)
 		{
 			string sql = "exec [_spDeletePhone] @Id";
