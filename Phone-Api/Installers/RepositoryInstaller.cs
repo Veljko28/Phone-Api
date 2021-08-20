@@ -14,12 +14,15 @@ namespace Phone_Api.Installers
 		public void InstallServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<IPhoneRepository, PhoneRepository>();
+			services.AddSingleton<IBidRepository, BidRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
+
 
 			services.AddSingleton<IWishListRepository, WishListRepository>();
 			services.AddSingleton<IPurchaseRepository, PurchaseRepository>();
+			services.AddScoped<INotificationRepository, NotificationRepository>();
 
-			services.AddSingleton<IBidRepository, BidRepository>();
+
 			services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
 		}
 	}
