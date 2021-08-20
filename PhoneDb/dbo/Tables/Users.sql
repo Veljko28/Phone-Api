@@ -7,5 +7,6 @@
 	[Description] NVARCHAR(256) NULL,
 	[Rating] INT NULL,
 	[PhoneNumber] NVARCHAR(100) NULL,
-	[Phones_sold] int NOT NULL DEFAULT 0
+	[Phones_sold] int NOT NULL DEFAULT 0,
+	[EmailConfirmed] bit NOT NULL DEFAULT 0
 )
