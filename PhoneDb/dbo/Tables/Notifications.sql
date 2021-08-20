@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Notifications]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(100) NULL,
+    [Type] NVARCHAR(10) NOT NULL,
+	[UserId] NVARCHAR(50) NOT NULL,
+	[Message] NVARCHAR(MAX) NULL 
+)
