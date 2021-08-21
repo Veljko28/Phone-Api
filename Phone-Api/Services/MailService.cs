@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MimeKit;
+using Phone_Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,10 +40,62 @@ namespace Phone_Api.Services
 			  "to confirm that we can use this email address to send you emails !</p>" +
 			  "<a href=\"http://localhost:3000/confirmemail/" + id +"\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
 			  "Confirm your email address</a>" +
-			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">A warm welcome by the MobiStore Support Team</p>" +
+			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">A warm welcome by the MobiStore Support Team © 2021</p>" +
 		"</div>"
 	 };
 				
+
+				using (SmtpClient client = new SmtpClient())
+				{
+					client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+					if (_env.IsDevelopment())
+					{
+						await client.ConnectAsync(_settings.Server, _settings.Port, true);
+					}
+					else
+					{
+						await client.ConnectAsync(_settings.Server);
+					}
+
+					await client.AuthenticateAsync(_settings.Username, _settings.Password);
+					await client.SendAsync(message);
+					await client.DisconnectAsync(true);
+
+				}
+
+			}
+			catch (Exception e)
+			{
+				throw new InvalidOperationException(e.Message);
+			}
+		}
+
+		public async Task SendItemSoldEmailAsync(ItemSoldEmailModel model)
+		{
+			try
+			{
+				var message = new MimeMessage();
+				message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
+				message.To.Add(new MailboxAddress(model.Email, model.Email));
+				message.Subject = model.ItemName + " Has Been Sold - MobiStore - Online Mobile Store";
+				message.Body = new TextPart("html")
+				{
+					Text =
+			  "<div style=\"text-align: center;background-color: #fff;padding: 20px\">" +
+			   "<img style=\"width: 200px; text-align: center\"" +
+			   "src=\"https://drive.google.com/thumbnail?id=1Q9PJsplffr9Bc8-WCWQcTc8NcHAzGhV3\" />" +
+			  "<h2 style=\"color: #0cafe5\">" + model.ItemName  + " Has Been Sold"+ "</h2>" +
+			  "<p style=\"color: #999; text-align: center;margin-bottom: 45px\">" +
+			  "Your " + model.Type + " has successfully been sold ! Please contanct the buyer <br/> with the button below about the shipping or meet up" +
+			  " for giving the phone." +
+			  "</p>" +
+			  "<a href=\"http://localhost:3000/user/" + model.BuyerId + "\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
+			  "Contact the Seller</a>" +
+			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">MobiStore Support Team © 2021</p>" +
+		"</div>"
+				};
+
 
 				using (SmtpClient client = new SmtpClient())
 				{
