@@ -75,9 +75,9 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to update the phone");
 		}
 
-		public async Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync()
+		public async Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync(string phoneId)
 		{
-			string sql = "SELECT TOP 4 * FROM [dbo].[Phones] ORDER BY NEWID()";
+			string sql = "SELECT TOP 4 * FROM [dbo].[Phones] WHERE Status = 0 AND Id != '" + phoneId + "' ORDER BY NEWID()";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -91,7 +91,7 @@ namespace Phone_Api.Repository
 
 		public async Task<IEnumerable<PhoneModel>> GetLastestPhonesAsync()
 		{
-			string sql = "SELECT TOP 4 * FROM [dbo].[Phones]";
+			string sql = "SELECT TOP 4 * FROM [dbo].[Phones] WHERE Status = 0";
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -100,6 +100,20 @@ namespace Phone_Api.Repository
 				var res = await db.QueryAsync<PhoneModel>(sql);
 
 				return res;
+			}
+		}
+
+		public async Task<int> GetNumOfPagesAsync()
+		{
+			string sql = "SELECT COUNT(*) FROM [dbo].[Phones] WHERE Status = 0";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfPages = await db.ExecuteScalarAsync<int>(sql);
+
+				return 15 % numOfPages;
 			}
 		}
 
