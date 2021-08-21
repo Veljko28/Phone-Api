@@ -11,13 +11,13 @@ namespace Phone_Api.Helpers
 		public const string version = "/v1";
 		public static class PhoneRoutes
 		{
-			public const string type = root + version + "/phones";
+			private const string type = root + version + "/phones";
 
 			public const string Add = type + "/add/{userId}";
 
 			public const string GetById = type + "/{phoneId}";
 
-			public const string Featured = type + "/featured";
+			public const string Featured = type + "/featured/{phoneId}";
 
 			public const string Latest = type + "/latest";
 
@@ -39,7 +39,7 @@ namespace Phone_Api.Helpers
 
 		public static class UserRoutes
 		{
-			public const string type = root + version + "/users";
+			private const string type = root + version + "/users";
 
 			public const string Register = type + "/register";
 
@@ -60,7 +60,7 @@ namespace Phone_Api.Helpers
 
 		public static class WishlistRoutes
 		{
-			public const string type = root + version + "/wishlist";
+			private const string type = root + version + "/wishlist";
 
 			public const string AddToWishList = type + "/add";
 
@@ -72,7 +72,7 @@ namespace Phone_Api.Helpers
 
 		public static class GenericRoutes
 		{
-			public const string type = root + version + "/generic";
+			private const string type = root + version + "/generic";
 
 			public const string UserImageUpload = type + "/user" +"/image";
 
@@ -92,7 +92,7 @@ namespace Phone_Api.Helpers
 
 		public static class PurchaseRoutes
 		{
-			public const string type = root + version + "/purchase";
+			private const string type = root + version + "/purchase";
 
 			public const string AddPhoneToPurchase = type + "/phonetopurchase/{purchaseId}/{phoneId}";
 
@@ -104,7 +104,7 @@ namespace Phone_Api.Helpers
 
 		public static class BidRoutes
 		{
-			public const string type = root + version + "/bids";
+			private const string type = root + version + "/bids";
 
 			public const string AddBid = type + "/add/{userId}";
 
@@ -127,13 +127,22 @@ namespace Phone_Api.Helpers
 
 		public static class NotificationsRoutes
 		{
-			public const string type = root + version + "/notifications";
+			private const string type = root + version + "/notifications";
 
 			public const string AddNotification = type + "/add";
 
 			public const string RemoveNotification = type + "/remove/{notificationId}";
 
 			public const string GetUserNotifications = type + "/{userId}";
+		}
+
+		public static class EmailRoutes
+		{
+			private const string type = root + version + "/email";
+
+			public const string ConfirmEmail = type + "/confirm";
+
+			public const string ItemSold = type + "/sold";
 		}
 
 	}
