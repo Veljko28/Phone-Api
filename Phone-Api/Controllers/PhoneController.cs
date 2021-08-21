@@ -88,9 +88,9 @@ namespace Phone_Api.Controllers
 		}
 
 		[HttpGet(ApiRoutes.PhoneRoutes.Featured)]
-		public async Task<IActionResult> Featured()
+		public async Task<IActionResult> Featured([FromRoute] string phoneId)
 		{
-			var phones = await _phones.GetFeaturedPhonesAsync();
+			var phones = await _phones.GetFeaturedPhonesAsync(phoneId);
 
 			return genericResponse(phones, "failed to get featured phones");
 
@@ -110,6 +110,12 @@ namespace Phone_Api.Controllers
 		public async Task<IActionResult> GetPage([FromRoute] string pageId)
 		{
 			var phones = await _phones.GetPhonePageAsync(pageId);
+			if (pageId == "1")
+			{
+				int numOfPages = await _phones.GetNumOfPagesAsync();
+
+				return genericResponse(new { phones, numOfPages }, "Failed to get latest phones");
+			}
 
 			return genericResponse(phones, "failed to get latest phones");
 
