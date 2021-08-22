@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MimeKit;
-using Phone_Api.Models;
+using Phone_Api.Models.EmailModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,14 +20,13 @@ namespace Phone_Api.Services
 			_env = env;
 		}
 
-		public async Task SendCofirmEmailAsync(string email)
+		public async Task SendCofirmEmailAsync(ConfirmEmailModel model)
 		{
 			try
 			{
-				string id = Guid.NewGuid().ToString();
 				var message = new MimeMessage();
 				message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
-				message.To.Add(new MailboxAddress(email, email));
+				message.To.Add(new MailboxAddress(model.Email, model.Email));
 				message.Subject = "Confirm Email - MobiStore - Online Mobile Store";
 				message.Body = new TextPart("html")
 				{
@@ -38,7 +37,7 @@ namespace Phone_Api.Services
 			  "<h2 style=\"color: #0cafe5\">Email Confirmation</h2>" +
 			  "<p style=\"color: #999; text-align: center;margin-bottom: 45px\">Yay ! You've created a MobiStore account with this email.<br/> Please take a moment " +
 			  "to confirm that we can use this email address to send you emails !</p>" +
-			  "<a href=\"http://localhost:3000/confirmemail/" + id +"\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
+			  "<a href=\"http://localhost:3000/confirmemail/" + model.ConfirmEmailId +"\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
 			  "Confirm your email address</a>" +
 			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">A warm welcome by the MobiStore Support Team © 2021</p>" +
 		"</div>"

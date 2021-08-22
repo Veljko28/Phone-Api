@@ -1,4 +1,4 @@
-﻿using Phone_Api.Models;
+﻿using Phone_Api.Models.EmailModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +8,7 @@ namespace Phone_Api.Services
 {
 	public interface IMailService
 	{
-		Task SendCofirmEmailAsync(string email);
+		Task SendCofirmEmailAsync(ConfirmEmailModel model);
 		Task SendItemSoldEmailAsync(ItemSoldEmailModel model);
 	}
 }
