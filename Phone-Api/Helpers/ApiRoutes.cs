@@ -88,6 +88,8 @@ namespace Phone_Api.Helpers
 
 			public const string AddReview = type + "/review";
 
+			public const string ConfirmEmail = type + "/confirmemail/{userId}";
+
 		}
 
 		public static class PurchaseRoutes
@@ -131,7 +133,7 @@ namespace Phone_Api.Helpers
 
 			public const string AddNotification = type + "/add";
 
-			public const string RemoveNotification = type + "/remove/{notificationId}";
+			public const string RemoveNotification = type + "/remove";
 
 			public const string GetUserNotifications = type + "/{userId}";
 		}

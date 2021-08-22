@@ -254,5 +254,20 @@ namespace Phone_Api.Controllers
 
             return BadRequest(res.ErrorMessage);
 		}
+
+        [HttpGet(ApiRoutes.GenericRoutes.ConfirmEmail)]
+        public async Task<IActionResult> ConfirmUserEmail([FromRoute] string userId)
+		{
+            string sql = "exec [_spConfirmUserEmail] @Id";
+
+            GenericResponse response = await DatabaseOperations.GenericExecute(sql, new { Id = userId }, _configuration, "Failed to confirm email");
+
+            if (!response.Success)
+			{
+                return BadRequest(response.ErrorMessage);
+			}
+
+            return Ok();
+		}
     }
 }
