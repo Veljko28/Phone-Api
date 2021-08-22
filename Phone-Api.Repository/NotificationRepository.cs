@@ -43,12 +43,12 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQueryList<dynamic, NotificationModel>(sql, new { Id = userId }, _configuration);
 		}
 
-		public async Task<GenericResponse> RemoveNotificationAsnyc(string Id)
+		public async Task<GenericResponse> RemoveNotificationAsnyc(NotificationModelRequest model)
 		{
 
-			string sql = "exec [_spRemoveNotifications] @Id";
+			string sql = "exec [_spRemoveNotifications] @Type, @Name, @UserId, @Message";
 
-			return await DatabaseOperations.GenericExecute(sql, new { Id }, _configuration, "Failed to remove notification");
+			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to remove notification");
 		}
 	}
 }

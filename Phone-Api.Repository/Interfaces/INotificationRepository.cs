@@ -13,7 +13,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<IEnumerable<NotificationModel>> GetUserNotificationsAsync(string userId);
 
 		Task<GenericResponse> AddNotificationAsnyc(NotificationModelRequest model);
-		Task<GenericResponse> RemoveNotificationAsnyc(string Id);
+		Task<GenericResponse> RemoveNotificationAsnyc(NotificationModelRequest model);
 
 	}
 }
