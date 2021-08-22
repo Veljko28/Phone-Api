@@ -48,9 +48,9 @@ namespace Phone_Api.Controllers
 
 
 		[HttpPost(ApiRoutes.NotificationsRoutes.RemoveNotification)]
-		public async Task<IActionResult> RemoveNotification([FromRoute] string notificationId)
+		public async Task<IActionResult> RemoveNotification([FromBody] NotificationModelRequest model)
 		{
-			GenericResponse response = await _notifications.RemoveNotificationAsnyc(notificationId);
+			GenericResponse response = await _notifications.RemoveNotificationAsnyc(model);
 
 			if (!response.Success)
 			{

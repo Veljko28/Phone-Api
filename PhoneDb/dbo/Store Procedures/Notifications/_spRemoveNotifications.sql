@@ -1,7 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[_spRemoveNotifications]
-	@Id NVARCHAR(50)
+	@Type NVARCHAR(10),
+	@Name NVARCHAR(100),
+	@UserId NVARCHAR(50),
+	@Message NVARCHAR(MAX)
 AS
 begin
-	DELETE FROM [dbo].[Notifications] WHERE Id = @Id;
+	DELETE FROM [dbo].[Notifications] WHERE [Type] = @Type AND [Name] = @Name AND UserId = @UserId AND @Message = @Message;
 end
 
