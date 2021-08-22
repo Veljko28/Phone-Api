@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Phone_Api.Models
+namespace Phone_Api.Models.EmailModels
 {
 	public class ItemSoldEmailModel
 	{
