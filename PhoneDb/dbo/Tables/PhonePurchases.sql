@@ -1,5 +1,8 @@
 ﻿CREATE TABLE [dbo].[PhonePurchases]
 (
+	[Id] int PRIMARY KEY IDENTITY,
 	[PurchaseId] NVARCHAR(50) NOT NULL,
-	[PhoneId] NVARCHAR(50) NOT NULL
+	[PhoneId] NVARCHAR(50) NOT NULL,
+	[SellerId] NVARCHAR(50) NOT NULL,
+	[BuyerId] NVARCHAR(50) NOT NULL
 )
