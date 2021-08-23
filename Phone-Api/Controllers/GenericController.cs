@@ -17,6 +17,7 @@ using Phone_Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Phone_Api.Models.Responses;
+using Phone_Api.Repository.Interfaces;
 
 namespace Phone_Api.Controllers
 {
@@ -25,12 +26,15 @@ namespace Phone_Api.Controllers
 	{
         private readonly IWebHostEnvironment environment;
 		private readonly IConfiguration _configuration;
+        private readonly IUserRepository _users;
 
-		public GenericController(IWebHostEnvironment _environment, IConfiguration configuration)
+        public GenericController(IWebHostEnvironment _environment, IConfiguration configuration, IUserRepository users)
         {
             environment = _environment;
 			_configuration = configuration;
-		}
+            _users = users;
+
+        }
 
         public class FormUpload
         {
@@ -259,6 +263,13 @@ namespace Phone_Api.Controllers
         public async Task<IActionResult> ConfirmUserEmail([FromRoute] string userId)
 		{
             string sql = "exec [_spConfirmUserEmail] @Id";
+
+            var user = await _users.GetUserByIdAsync(userId);
+
+            if (user.EmailConfirmed)
+			{
+                return BadRequest("The email has already been confirmed");
+			}
 
             GenericResponse response = await DatabaseOperations.GenericExecute(sql, new { Id = userId }, _configuration, "Failed to confirm email");
 
