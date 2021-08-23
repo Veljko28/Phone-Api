@@ -261,9 +261,23 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericExecute(sql, new { Id = userId, model.UserName, model.Email, model.Description, model.PhoneNumber }, _configuration, "Failed to update the profile");
 		}
 
-		public async Task<string> GetUserNameById(string userId)
+		public async Task<string> GetUserNameByIdAsync(string userId)
 		{
 			string sql = "exec [_spGetUserNameById] @Id";
+
+			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { Id = userId }, _configuration);
+		}
+
+		public async Task<UserModel> GetUserByEmailAsync(string email)
+		{
+			string sql = "exec [_spGetUserByEmail] @Email";
+
+			return await DatabaseOperations.GenericQuerySingle<dynamic, UserModel>(sql, new { Email = email }, _configuration);
+		}
+
+		public async Task<string> GetEmailByIdAsync(string userId)
+		{
+			string sql = "exec [_spGetUserEmailById] @Id";
 
 			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { Id = userId }, _configuration);
 		}
