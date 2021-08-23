@@ -104,7 +104,7 @@ namespace Phone_Api.Controllers
 
 		public async Task<IActionResult> GetUserNameById([FromRoute] string userId)
 		{
-			var response = await _users.GetUserNameById(userId);
+			var response = await _users.GetUserNameByIdAsync(userId);
 			
 			if (response == null)
 			{
@@ -126,6 +126,19 @@ namespace Phone_Api.Controllers
 			}
 
 			return Ok();
+		}
+
+		[HttpGet(ApiRoutes.UserRoutes.GetUserEmail)]
+		public async Task<IActionResult> GetUserEmail([FromRoute] string userId)
+		{
+			string email = await _users.GetEmailByIdAsync(userId);
+
+			if (email == null)
+			{
+				return BadRequest("Failed to get the email");
+			}
+
+			return Ok(email);
 		}
 
 	}
