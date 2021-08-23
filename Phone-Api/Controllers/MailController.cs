@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
 using Phone_Api.Models.EmailModels;
+using Phone_Api.Repository.Interfaces;
 using Phone_Api.Services;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,24 @@ namespace Phone_Api.Controllers
 	public class MailController : Controller
 	{
 		private readonly IMailService _mail;
+		private readonly IUserRepository _users;
 
-		public MailController(IMailService mail)
+		public MailController(IMailService mail, IUserRepository users)
 		{
 			_mail = mail;
+			_users = users;
 		}
 
 		[HttpPost(ApiRoutes.EmailRoutes.ConfirmEmail)]
 		public async Task<IActionResult> SendEmail([FromBody] ConfirmEmailModel model)
 		{
+			var user = await _users.GetUserByEmailAsync(model.Email);
+
+			if (user.EmailConfirmed)
+			{
+				return BadRequest("The email has already been confirmed");
+			}
+
 			await _mail.SendCofirmEmailAsync(model);
 
 			return Ok();
