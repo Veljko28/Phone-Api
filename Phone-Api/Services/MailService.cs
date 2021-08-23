@@ -34,9 +34,9 @@ namespace Phone_Api.Services
 			  "<div style=\"text-align: center;background-color: #fff;padding: 20px\">" +
 			   "<img style=\"width: 200px; text-align: center\"" +
 			   "src=\"https://drive.google.com/thumbnail?id=1Q9PJsplffr9Bc8-WCWQcTc8NcHAzGhV3\" />" +
-			  "<h2 style=\"color: #0cafe5\">Email Confirmation</h2>" +
-			  "<p style=\"color: #999; text-align: center;margin-bottom: 45px\">Yay ! You've created a MobiStore account with this email.<br/> Please take a moment " +
-			  "to confirm that we can use this email address to send you emails !</p>" +
+			  "<h1 style=\"color: #0cafe5\">Email Confirmation</h2>" +
+			  "<h5 style=\"color: #999; text-align: center;margin-bottom: 45px\">Yay ! You've created a MobiStore account with this email.<br/> Please take a moment " +
+			  "to confirm that we can use this email address to send you emails !</h5>" +
 			  "<a href=\"http://localhost:3000/confirmemail/" + model.ConfirmEmailId +"\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
 			  "Confirm your email address</a>" +
 			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">A warm welcome by the MobiStore Support Team © 2021</p>" +
@@ -77,14 +77,14 @@ namespace Phone_Api.Services
 				var message = new MimeMessage();
 				message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
 				message.To.Add(new MailboxAddress(model.Email, model.Email));
-				message.Subject = model.ItemName + " Has Been Sold - MobiStore - Online Mobile Store";
+				message.Subject = model.Name + " Has Been Sold - MobiStore - Online Mobile Store";
 				message.Body = new TextPart("html")
 				{
 					Text =
 			  "<div style=\"text-align: center;background-color: #fff;padding: 20px\">" +
 			   "<img style=\"width: 200px; text-align: center\"" +
 			   "src=\"https://drive.google.com/thumbnail?id=1Q9PJsplffr9Bc8-WCWQcTc8NcHAzGhV3\" />" +
-			  "<h2 style=\"color: #0cafe5\">" + model.ItemName  + " Has Been Sold"+ "</h2>" +
+			  "<h2 style=\"color: #0cafe5\">" + model.Name  + " Has Been Sold"+ "</h2>" +
 			  "<p style=\"color: #999; text-align: center;margin-bottom: 45px\">" +
 			  "Your " + model.Type + " has successfully been sold ! Please contanct the buyer <br/> with the button below about the shipping or meet up" +
 			  " for giving the phone." +
