@@ -120,5 +120,33 @@ namespace Phone_Api.Repository
 
 			return await DatabaseOperations.GenericExecute(sql, req, _configuration, "Failed to update the price");
 		}
+
+		public async Task<int> GetNumOfPagesAsync(string sellerId = null)
+		{
+			string sql = "SELECT COUNT(*) FROM [dbo].[Bids]";
+
+			if (sellerId != null)
+			{
+				sql = "SELECT COUNT(*) FROM [dbo].[Bids] WHERE Seller = '" + sellerId + "'";
+			}
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfPages = await db.ExecuteScalarAsync<int>(sql);
+
+				if (sellerId != null)
+				{
+					double managementPages = numOfPages / 8.0;
+
+					return (int)Math.Ceiling(managementPages);
+				}
+
+				double pages = numOfPages / 10.0;
+
+				return (int)Math.Ceiling(pages);
+			}
+		}
 	}
 }
