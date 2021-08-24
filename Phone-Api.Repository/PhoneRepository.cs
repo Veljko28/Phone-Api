@@ -103,9 +103,14 @@ namespace Phone_Api.Repository
 			}
 		}
 
-		public async Task<int> GetNumOfPagesAsync()
+		public async Task<int> GetNumOfPagesAsync(string sellerId = null)
 		{
 			string sql = "SELECT COUNT(*) FROM [dbo].[Phones] WHERE Status = 0";
+
+			if (sellerId != null)
+			{
+			    sql = "SELECT COUNT(*) FROM [dbo].[Phones] WHERE Seller = '" + sellerId + "'";
+			}
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
@@ -113,7 +118,16 @@ namespace Phone_Api.Repository
 
 				int numOfPages = await db.ExecuteScalarAsync<int>(sql);
 
-				return 15 % numOfPages;
+				if (sellerId != null)
+				{
+					double managementPages = numOfPages / 8.0;
+
+					return (int)Math.Ceiling(managementPages);
+				}
+
+				double pages = numOfPages / 10.0;
+
+				return (int)Math.Ceiling(pages);
 			}
 		}
 
