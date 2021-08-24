@@ -55,6 +55,8 @@ namespace Phone_Api.Helpers
 
 			public const string GetUserNameById = type + "/username/{userId}";
 
+			public const string GetUserEmail = type + "/{userId}/email";
+
 
 		}
 
@@ -67,6 +69,8 @@ namespace Phone_Api.Helpers
 			public const string RemoveFromWishList = type + "/remove";
 
 			public const string GetUserWishes = type + "/get";
+
+			public const string IsInWishList = type + "/contains";
 
 		}
 
@@ -112,7 +116,7 @@ namespace Phone_Api.Helpers
 
 			public const string BidById = type + "/{bid_Id}";
 
-			public const string UserBids = type + "/user" + "/{userId}";
+			public const string UserBids = type + "/user" + "/{userId}/{pageNum}";
 
 			public const string AddHistory = type +  "/addhistory";
 
