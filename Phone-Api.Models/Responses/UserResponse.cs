@@ -12,5 +12,6 @@ namespace Phone_Api.Models.Responses
 		public string Description { get; set; }
 		public int Phones_sold { get; set; }
 		public string PhoneNumber { get; set; }
+		public bool EmailConfirmed { get; set; }
 	}
 }
