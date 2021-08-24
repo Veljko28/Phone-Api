@@ -83,13 +83,20 @@ namespace Phone_Api.Controllers
 
 		[AllowAnonymous]
 		[HttpGet(ApiRoutes.BidRoutes.UserBids)]
-		public async Task<IActionResult> UserBids([FromRoute] string userId)
+		public async Task<IActionResult> UserBids([FromRoute] string userId, [FromRoute] int pageNum)
 		{
-			var result = await _bids.GetUserBidsAsync(userId);
+			var bids = await _bids.GetUserBidsAsync(userId);
 
-			if (result == null) return BadRequest("Cannot find any bids for user with id :" + userId);
+			if (bids == null) return BadRequest("Cannot find any bids for user with id :" + userId);
 
-			return Ok(result);
+			if (pageNum == 1)
+			{
+				int numOfPages = await _bids.GetNumOfPagesAsync();
+
+				return genericResponse(new { bids, numOfPages }, "Failed to get latest phones");
+			}
+
+			return Ok(bids);
 		}
 		
 		[AllowAnonymous]
@@ -97,13 +104,14 @@ namespace Phone_Api.Controllers
 		public async Task<IActionResult> GetPage([FromRoute] string pageId)
 		{
 			var phones = await _bids.GetBidPageAsync(pageId);
-
-			if (phones == null || phones.Count() == 0)
+			if (pageId == "1")
 			{
-				return BadRequest("Failed to find any bids");
+				int numOfPages = await _bids.GetNumOfPagesAsync();
+
+				return genericResponse(new { phones, numOfPages }, "Failed to get latest phones");
 			}
 
-			return Ok(phones);
+			return genericResponse(phones, "failed to get latest phones");
 		}
 
 		[AllowAnonymous]
