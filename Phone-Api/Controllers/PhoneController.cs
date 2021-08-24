@@ -74,6 +74,13 @@ namespace Phone_Api.Controllers
 		{
 			var phones = await _phones.GetSellerPhonesByIdAsync(sellerId, pageNum);
 
+			if (pageNum == 1)
+			{
+				int numOfPages = await _phones.GetNumOfPagesAsync(sellerId);
+
+				return genericResponse(new { phones, numOfPages }, "Failed to get latest phones");
+			}
+
 			return genericResponse(phones,"Cannot find any phones for this user");
 
 		}
