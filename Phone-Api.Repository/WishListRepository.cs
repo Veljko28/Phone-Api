@@ -36,6 +36,40 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericExecute(sql, wish, _configuration, "Failed to insert the item to the wish list");
 		}
 
+		public async Task<List<string>> FindUserWishListAsync(PageInWishListRequest model)
+		{
+			string sql = "exec [_spFindUserWishList] @UserId, @PhoneId, @Type";
+			List<string> phoneIds = new List<string>();
+
+			foreach (PhoneModel phone in model.List)
+			{
+
+				bool isInWishList = await DatabaseOperations.GenericQuerySingle
+					<dynamic, WishListModel>(sql, new { phoneId = phone.Id, model.Type, model.UserId }, _configuration) != null;
+
+				if (isInWishList)
+				{
+					phoneIds.Add(phone.Id);
+				}
+			}
+
+			return phoneIds;
+		}
+
+		public async Task<int> GetPhoneFavoritesAsync(string phoneId)
+		{
+			string sql = "SELECT COUNT(*) FROM [dbo].[WishLists] WHERE PhoneId = '" + phoneId + "'";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfFavorites = await db.ExecuteScalarAsync<int>(sql);
+
+				return numOfFavorites;
+			}
+		}
+
 		public async Task<IEnumerable<string>> GetUserWishesAsync(UserWishListRequest model)
 		{
 			string sql = "exec [_spGetUserWishes] @UserId, @Type";
