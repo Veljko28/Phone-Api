@@ -35,6 +35,8 @@ namespace Phone_Api.Helpers
 			
 			public const string ChangeStatus = type + "/status";
 
+			public const string UserNumberOfPhonesSelling = type + "/userphones/{userId}";
+
 		}
 
 		public static class UserRoutes
@@ -72,6 +74,8 @@ namespace Phone_Api.Helpers
 
 			public const string IsInWishList = type + "/contains";
 
+			public const string GetPhoneFavorites = type + "/favorites" + "/{phoneId}";
+
 		}
 
 		public static class GenericRoutes
@@ -100,11 +104,9 @@ namespace Phone_Api.Helpers
 		{
 			private const string type = root + version + "/purchase";
 
-			public const string AddPhoneToPurchase = type + "/phonetopurchase/{purchaseId}/{phoneId}";
+			public const string AddPurchase = type + "/add";
 
-			public const string AddPurchase = type + "/addpurchase";
-
-			public const string GetPurchasePhones = type + "/getphones/{purchaseId}";
+			public const string GetPurchasedPhones = type + "/phones" + "/{userId}/{page}";
 		}
 
 

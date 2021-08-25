@@ -182,5 +182,14 @@ namespace Phone_Api.Controllers
 
 			return BadRequest(phone.ErrorMessage);
 		}
+
+
+		[HttpGet(ApiRoutes.PhoneRoutes.UserNumberOfPhonesSelling)]
+		public async Task<IActionResult> UserNumberOfPhonesSelling([FromRoute] string userId)
+		{
+			int numOfPhones = await _phones.GetNumOfUserPhonesAsync(userId);
+
+			return Ok(numOfPhones);
+		}
 	}
 }
