@@ -131,6 +131,20 @@ namespace Phone_Api.Repository
 			}
 		}
 
+		public async Task<int> GetNumOfUserPhonesAsync(string userId)
+		{
+			string sql = "exec [_spGetNumberOfUserPhones] @UserId";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfPhones = await db.ExecuteScalarAsync<int>(sql, new { UserId = userId });
+
+				return numOfPhones;
+			}
+		}
+
 		public async Task<PhoneModel> GetPhoneByIdAsync(string Id)
 		{
 			string sql = "exec [_spFindPhoneByID] @Id";

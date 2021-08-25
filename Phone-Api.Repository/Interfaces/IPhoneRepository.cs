@@ -23,6 +23,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<IEnumerable<ReviewModel>> GetPhoneReviewsById(string Id);
 		Task<GenericResponse> ChangeStatusAsync(ChangePhoneStatusRequest request);
 		Task<int> GetNumOfPagesAsync(string sellerId = null);
+		Task<int> GetNumOfUserPhonesAsync(string userId);
 
 	}
 
