@@ -20,43 +20,51 @@ namespace Phone_Api.Repository
 		{
 			_configuration = configuration;
 		}
-
-		public async Task<GenericResponse> AddPhoneToPurchaseAsync(string PurchaseId, string PhoneId)
+		public async Task<GenericResponse> AddPurchaseAsync(IEnumerable<PurchaseRequest> req)
 		{
-			string sql = "exec [_spAddPhoneToPurchase] @PurchaseId, @PhoneId";
+			string sql = "exec [_spAddPurchase] @BuyerId, @SellerId, @PhoneId";
 
-			return await DatabaseOperations.GenericExecute(sql, new { PurchaseId , PhoneId }, _configuration, "Failed to add phone to purchase list");
-		}
-
-		public async Task<string> AddPurchaseAsync(PurchaseRequest req)
-		{
-			string sql = "exec [_spAddPurchase] @Id, @UserId, @Total, @PurchaseDate";
-
-			PurchaseModel model = new PurchaseModel
-			{
-				Id = Guid.NewGuid().ToString(),
-				UserId = req.UserId,
-				Total = req.Total,
-				PurchaseDate = req.PurchaseDate
-			};
 
 			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
 			{
 				await db.OpenAsync();
 
-				int rowsModified = await db.ExecuteAsync(sql, model);
+				foreach(var model in req)
+				{
+					int rowsModified = await db.ExecuteAsync(sql, model);
 
-				if (rowsModified > 0) return model.Id;
+					if (rowsModified == 0)
+					{
+						return new GenericResponse { Success = false, ErrorMessage = "Failed to add a purchase" };
+					}
 
-				return null;
+				}
+				return new GenericResponse { Success = true };
 			}
 		}
 
-		public async Task<IEnumerable<string>> GetPurchasePhonesAsync(string PurchaseId)
+		public async Task<int> GetNumOfPagesAsync(string userId)
 		{
-			string sql = "exec [_spGetPurchasedPhones] @PurchaseId";
+			string sql = "SELECT COUNT(*) FROM [dbo].[PhonePurchases] WHERE BuyerId = '" + userId + "'";
 
-			return await DatabaseOperations.GenericQueryList<dynamic, string>(sql, new { PurchaseId }, _configuration);
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfPages = await db.ExecuteScalarAsync<int>(sql);
+
+				double managementPages = numOfPages / 8.0;
+
+				return (int)Math.Ceiling(managementPages);
+
+			}
+		}
+
+		public async Task<IEnumerable<string>> GetPurchasedPhonesPageAsync(string userId, int page)
+		{
+			string sql = "exec [_spGetPurchasedPhones] @UserId, @Page";
+
+			return await DatabaseOperations.GenericQueryList<dynamic,string>(sql, new { UserId = userId, Page = page }, _configuration);
 		}
 	}
 }
