@@ -16,6 +16,7 @@ namespace Phone_Api.Models
 		Running,
 		Won,
 		Lost,
+		Failed,
 		Deleted
 	}
 }
