@@ -281,5 +281,28 @@ namespace Phone_Api.Repository
 
 			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { Id = userId }, _configuration);
 		}
+
+		public async Task<bool> UpdatePhonesSoldAsync(string userId)
+		{
+			string sql = "UPDATE [dbo].[Users] SET Phones_sold = Phones_sold + 1 WHERE Id = '" + userId + "'";
+
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int rowsModified = await db.ExecuteAsync(sql);
+
+				return rowsModified > 0;
+
+			}
+		}
+
+		public async Task<string> GetUserIdByNameAsync(string userName)
+		{
+			string sql = "exec [_spGetUserIdByName] @UserName";
+
+			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { UserName = userName }, _configuration);
+		}
 	}
 }
