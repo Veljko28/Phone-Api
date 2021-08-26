@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
+using Phone_Api.Models;
+using Phone_Api.Models.Requests;
 using Phone_Api.Models.Requests.BidRequests;
+using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -66,6 +69,34 @@ namespace Phone_Api.Controllers
 			var results = await _bids.GetBidHistoriesAsync(bid_Id);
 
 			return Ok(results);
+		}
+
+		[HttpGet(ApiRoutes.BidRoutes.GetPlacedBids)]
+		public async Task<IActionResult> GetPlacedBids([FromRoute] string userName, [FromRoute] int page)
+		{
+			List<BidModel> phones = await _bids.GetPlacedBidsAsync(userName, page);
+
+			if (page == 1)
+			{
+				int numOfPages = await _bids.GetPlacedBidsNumOfPagesAsync(userName);
+
+				return Ok(new { phones, numOfPages });
+			}
+
+			return Ok(phones);
+		}
+
+		[HttpPost(ApiRoutes.BidRoutes.ChangeStatus)]
+		public async Task<IActionResult> ChangeStatus([FromBody] ChangeBidStatusRequest bidRequest)
+		{
+			string userName = await _bids.ChangeStatusAsync(bidRequest);
+
+			if (userName == null)
+			{
+				return BadRequest();
+			}
+
+			return Ok(new { userName });
 		}
 
 
