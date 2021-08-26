@@ -41,6 +41,13 @@ namespace Phone_Api.Controllers
 		{
 			await _mail.SendItemSoldEmailAsync(model);
 
+			bool sold = await _users.UpdatePhonesSoldAsync(model.SellerId);
+
+			if (!sold)
+			{
+				return BadRequest("Failed to sell the phone");
+			}
+
 			return Ok();
 		}
 	}
