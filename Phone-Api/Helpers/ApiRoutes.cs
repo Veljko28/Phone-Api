@@ -59,6 +59,7 @@ namespace Phone_Api.Helpers
 
 			public const string GetUserEmail = type + "/{userId}/email";
 
+			public const string GetUserIdByName = type + "/userId/{userName}";
 
 		}
 
@@ -130,6 +131,9 @@ namespace Phone_Api.Helpers
 
 			public const string Delete = type + "/delete" + "/{bid_Id}";
 
+			public const string GetPlacedBids = type + "/placed" + "/{userName}/{page}";
+
+			public const string ChangeStatus = type + "/status";
 
 		}
 
