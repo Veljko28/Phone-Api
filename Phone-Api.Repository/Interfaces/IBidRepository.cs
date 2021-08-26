@@ -11,15 +11,19 @@ namespace Phone_Api.Repository.Interfaces
 {
 	public interface IBidRepository
 	{
-		Task<BidModel> AddBidAsync(BidRequest req, string userId);
+		Task<int> GetNumOfPagesAsync(string sellerId = null);
+		Task<int> GetPlacedBidsNumOfPagesAsync(string userName);
 		Task<BidModel> GetBidByIdAsync(string bid_Id);
-		Task<IEnumerable<BidHistoryModel>> GetBidHistoriesAsync(string bid_Id);
-		Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req);
-		Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId);
+		Task<BidModel> AddBidAsync(BidRequest req, string userId);
+		Task<List<BidModel>> GetPlacedBidsAsync(string userName, int page);
 		Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId);
-		Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id);
+		Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId);
+		Task<IEnumerable<BidHistoryModel>> GetBidHistoriesAsync(string userName);
+		Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req);
 		Task<GenericResponse> DeleteBidAsync(string bid_Id);
 		Task<GenericResponse> UpdatePriceAsync(BidPriceUpdateRequest req);
-		Task<int> GetNumOfPagesAsync(string sellerId = null);
+		Task<string> ChangeStatusAsync(ChangeBidStatusRequest bidRequest);
+		Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id);
+
 	}
 }

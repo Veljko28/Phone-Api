@@ -9,6 +9,7 @@ using Phone_Api.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -147,6 +148,76 @@ namespace Phone_Api.Repository
 
 				return (int)Math.Ceiling(pages);
 			}
+		}
+
+		public async Task<List<BidModel>> GetPlacedBidsAsync(string userName, int page)
+		{
+			string sql = "exec [_spGetBidHisotriesByUserName] @UserName, @Page";
+
+			var histories = await DatabaseOperations.GenericQueryList<dynamic, BidHistoryModel>(sql, new { UserName = userName, Page = page }, _configuration);
+
+			List<BidModel> bids = new List<BidModel>();
+
+			foreach (var history in histories)
+			{
+				BidModel bid = await GetBidByIdAsync(history.Bid_Id);
+
+				if (bid != null) bids.Add(bid);
+			}
+
+			return bids;
+		}
+
+		public async Task<int> GetPlacedBidsNumOfPagesAsync(string userName)
+		{
+			string sql = "exec [_spGetPlacedBidNumOfPages] @userName";
+
+			using (SqlConnection db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				await db.OpenAsync();
+
+				int numOfPages = await db.ExecuteScalarAsync<int>(sql,new { UserName = userName });
+
+				double managementPages = numOfPages / 8.0;
+
+				return (int)Math.Ceiling(managementPages);
+			}
+		}
+
+		public async Task<string> ChangeStatusAsync(ChangeBidStatusRequest bidRequest)
+		{
+			string sql = "exec [_spChangeBidStatus] @Id, @Status";
+
+			var histories = await GetBidHistoriesAsync(bidRequest.Bid_Id);
+
+			if (histories.Count() == 0)
+			{
+				bidRequest.Status = BidStatus.Failed;
+				GenericResponse response = await DatabaseOperations.GenericExecute(sql, new { Id = bidRequest.Bid_Id, bidRequest.Status }, _configuration, "Failed to update the status");
+			}
+			else
+			{
+			
+				decimal highest_value = histories.Max(x => x.Amount);
+
+				BidHistoryModel highest_bid = histories.Where(x => x.Amount == highest_value).FirstOrDefault();
+
+				if (highest_bid == null)
+				{
+					bidRequest.Status = BidStatus.Failed;
+				}
+
+				string userName = highest_bid?.UserName;
+
+				GenericResponse response = await DatabaseOperations.GenericExecute(sql, new { Id = bidRequest.Bid_Id, bidRequest.Status}, _configuration, "Failed to update the status");
+
+				if (response.Success)
+				{
+					return userName;
+				}
+			}
+
+			return null;
 		}
 	}
 }
