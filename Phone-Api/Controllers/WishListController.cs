@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
 {
-	
+
 	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class WishListController : Controller
 	{
@@ -104,5 +104,21 @@ namespace Phone_Api.Controllers
 		}
 
 
+		[HttpPost(ApiRoutes.WishlistRoutes.IsInWishList)]
+		public async Task<IActionResult> IsInWishList([FromBody] PageInWishListRequest model)
+		{
+			List<string> phoneIds = await _wishList.FindUserWishListAsync(model);
+
+			return Ok(phoneIds);
+		}
+
+		[AllowAnonymous]
+		[HttpGet(ApiRoutes.WishlistRoutes.GetPhoneFavorites)]
+		public async Task<IActionResult> GetPhoneFavorites([FromRoute] string phoneId)
+		{
+			int phoneFavorites = await _wishList.GetPhoneFavoritesAsync(phoneId);
+
+			return Ok(phoneFavorites);
+		}
 	}
 }
