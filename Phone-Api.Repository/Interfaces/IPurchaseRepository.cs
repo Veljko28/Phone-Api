@@ -10,6 +10,7 @@ namespace Phone_Api.Repository.Interfaces
 	public interface IPurchaseRepository
 	{
 		Task<GenericResponse> AddPurchaseAsync(IEnumerable<PurchaseRequest> req);
+		Task<GenericResponse> PhoneBoughtByUserAsync(string userId, string phoneId);
 		Task<IEnumerable<string>> GetPurchasedPhonesPageAsync(string userId, int page);
 		Task<int> GetNumOfPagesAsync(string userId);
 	}

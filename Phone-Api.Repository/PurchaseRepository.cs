@@ -66,5 +66,19 @@ namespace Phone_Api.Repository
 
 			return await DatabaseOperations.GenericQueryList<dynamic,string>(sql, new { UserId = userId, Page = page }, _configuration);
 		}
+
+		public async Task<GenericResponse> PhoneBoughtByUserAsync(string userId, string phoneId)
+		{
+			string sql = "exec [_spPhoneBoughtByUser] @UserId, @PhoneId";
+
+			PurchaseModel model = await DatabaseOperations.GenericQuerySingle<dynamic, PurchaseModel>(sql, new { UserId = userId, PhoneId = phoneId }, _configuration);
+			
+			if (model != null)
+			{
+				return new GenericResponse { Success = true };
+			}
+
+			return new GenericResponse { Success = false, ErrorMessage = "This user didn't buy this phone" };
+		}
 	}
 }
