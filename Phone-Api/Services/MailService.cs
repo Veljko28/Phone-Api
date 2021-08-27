@@ -20,78 +20,25 @@ namespace Phone_Api.Services
 			_env = env;
 		}
 
-		public async Task SendCofirmEmailAsync(ConfirmEmailModel model)
+		public async Task GenericEmail(string email, string subject, string link, string title, string text, string buttonText, string smallText)
 		{
 			try
 			{
 				var message = new MimeMessage();
 				message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
-				message.To.Add(new MailboxAddress(model.Email, model.Email));
-				message.Subject = "Confirm Email - MobiStore - Online Mobile Store";
-				message.Body = new TextPart("html")
-				{
-					Text = 
-			  "<div style=\"text-align: center;background-color: #fff;padding: 20px\">" +
-			   "<img style=\"width: 200px; text-align: center\"" +
-			   "src=\"https://drive.google.com/thumbnail?id=1Q9PJsplffr9Bc8-WCWQcTc8NcHAzGhV3\" />" +
-			  "<h1 style=\"color: #0cafe5\">Email Confirmation</h2>" +
-			  "<h5 style=\"color: #999; text-align: center;margin-bottom: 45px\">Yay ! You've created a MobiStore account with this email.<br/> Please take a moment " +
-			  "to confirm that we can use this email address to send you emails !</h5>" +
-			  "<a href=\"http://localhost:3000/confirmemail/" + model.ConfirmEmailId +"\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
-			  "Confirm your email address</a>" +
-			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">A warm welcome by the MobiStore Support Team © 2021</p>" +
-		"</div>"
-	 };
-				
-
-				using (SmtpClient client = new SmtpClient())
-				{
-					client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-					if (_env.IsDevelopment())
-					{
-						await client.ConnectAsync(_settings.Server, _settings.Port, true);
-					}
-					else
-					{
-						await client.ConnectAsync(_settings.Server);
-					}
-
-					await client.AuthenticateAsync(_settings.Username, _settings.Password);
-					await client.SendAsync(message);
-					await client.DisconnectAsync(true);
-
-				}
-
-			}
-			catch (Exception e)
-			{
-				throw new InvalidOperationException(e.Message);
-			}
-		}
-
-		public async Task SendItemSoldEmailAsync(ItemSoldEmailModel model)
-		{
-			try
-			{
-				var message = new MimeMessage();
-				message.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
-				message.To.Add(new MailboxAddress(model.Email, model.Email));
-				message.Subject = model.Name + " Has Been Sold - MobiStore - Online Mobile Store";
+				message.To.Add(new MailboxAddress(email, email));
+				message.Subject = subject;
 				message.Body = new TextPart("html")
 				{
 					Text =
 			  "<div style=\"text-align: center;background-color: #fff;padding: 20px\">" +
 			   "<img style=\"width: 200px; text-align: center\"" +
 			   "src=\"https://drive.google.com/thumbnail?id=1Q9PJsplffr9Bc8-WCWQcTc8NcHAzGhV3\" />" +
-			  "<h2 style=\"color: #0cafe5\">" + model.Name  + " Has Been Sold"+ "</h2>" +
-			  "<p style=\"color: #999; text-align: center;margin-bottom: 45px\">" +
-			  "Your " + model.Type + " has successfully been sold ! Please contanct the buyer <br/> with the button below about the shipping or meet up" +
-			  " for giving the phone." +
-			  "</p>" +
-			  "<a href=\"http://localhost:3000/user/" + model.BuyerId + "\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
-			  "Contact the Seller</a>" +
-			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">MobiStore Support Team © 2021</p>" +
+			  "<h1 style=\"color: #0cafe5\">" + title +"</h2>" +
+			  "<h5 style=\"color: #999; text-align: center;margin-bottom: 45px\">" + text + "</h5>" +
+			  "<a href=\"" + link + "\" style=\"padding: 20px;font-size:15px;border:none;color: #fff;border-radius:5px;background-color: #0cafe5;text-decoration: none\">" +
+			   buttonText + "</a>" +
+			"<p style=\"color: #999; font-size: 10px; margin-top: 45px\">" + smallText + "</p>" +
 		"</div>"
 				};
 
@@ -120,6 +67,30 @@ namespace Phone_Api.Services
 			{
 				throw new InvalidOperationException(e.Message);
 			}
+		}
+
+		public async Task SendCofirmEmailAsync(ConfirmEmailModel model)
+		{
+			await GenericEmail(model.Email,
+				"Confirm Email - MobiStore - Online Mobile Store",
+				"http://localhost:3000/confirmemail/" + model.ConfirmEmailId,
+				"Email Confirmation",
+				"Yay! You've created a MobiStore account with this email.<br/> Please take a moment " +
+			    "to confirm that we can use this email address to send you emails ! ",
+				 "Confirm your email address",
+				 "A warm welcome by the MobiStore Support Team © 2021");
+		}
+
+		public async Task SendItemSoldEmailAsync(ItemSoldEmailModel model)
+		{
+			await GenericEmail(model.Email,
+				model.Name + " Has Been Sold - MobiStore - Online Mobile Store",
+				"http://localhost:3000/user/" + model.BuyerId,
+				 model.Type == "phone" ? model.Name + " Has Been Sold" : "The Bid For " + model.Name + " Has Finished !",
+				 "Your " + model.Type + " has successfully " + (model.Type == "phone" ? "been sold" : "finished") + " ! Please contanct the buyer <br/> with the button below about the shipping or meet up " +
+				 "for giving the phone.",
+				 "Contact the Buyer",
+				 "MobiStore Support Team © 2021"); ;
 		}
 	}
 }
