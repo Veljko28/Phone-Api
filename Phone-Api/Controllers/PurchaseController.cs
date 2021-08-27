@@ -56,5 +56,18 @@ namespace Phone_Api.Controllers
 
 			return Ok(phones);
 		}
+
+		[HttpGet(ApiRoutes.PurchaseRoutes.PhoneBoughtByUser)]
+		public async Task<IActionResult> PhoneBoughtByUser([FromRoute] string userId, [FromRoute] string phoneId)
+		{
+			var result = await _purchases.PhoneBoughtByUserAsync(userId, phoneId);
+
+			if (!result.Success)
+			{
+				return NotFound(result.ErrorMessage);
+			}
+
+			return Ok(true);
+		}
 	}
 }
