@@ -76,14 +76,9 @@ namespace Phone_Api.Controllers
 		{
 			List<BidModel> phones = await _bids.GetPlacedBidsAsync(userName, page);
 
-			if (page == 1)
-			{
-				int numOfPages = await _bids.GetPlacedBidsNumOfPagesAsync(userName);
+			int numOfPages = await _bids.GetPlacedBidsNumOfPagesAsync(userName);
 
-				return Ok(new { phones, numOfPages });
-			}
-
-			return Ok(phones);
+			return Ok(new { phones, numOfPages });
 		}
 
 		[HttpPost(ApiRoutes.BidRoutes.ChangeStatus)]
