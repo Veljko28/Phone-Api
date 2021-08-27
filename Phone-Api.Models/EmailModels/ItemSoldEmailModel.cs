@@ -9,6 +9,8 @@ namespace Phone_Api.Models.EmailModels
 		public string Email { get; set; }
 		public string BuyerId { get; set; }
 		public string Type { get; set; }
-		public string ItemName { get; set; }
+		public string Name { get; set; }
+		public string SellerId { get; set; }
+
 	}
 }

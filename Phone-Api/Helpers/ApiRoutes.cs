@@ -108,6 +108,8 @@ namespace Phone_Api.Helpers
 			public const string AddPurchase = type + "/add";
 
 			public const string GetPurchasedPhones = type + "/phones" + "/{userId}/{page}";
+
+			public const string PhoneBoughtByUser = type + "/bought" + "/{userId}/{phoneId}";
 		}
 
 
