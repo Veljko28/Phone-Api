@@ -1,6 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[_spGetPurchasedPhones]
-	@PurchaseId NVARCHAR(50)
+	@UserId NVARCHAR(50),
+	@Page int
 AS
 begin
-	SELECT PhoneId FROM [dbo].[PhonePurchases] WHERE PurchaseId = @PurchaseId;
+	 SELECT TOP 8 PhoneId FROM (
+            SELECT ROW_NUMBER() OVER(ORDER BY Id) AS RoNum
+                  , *
+            FROM [dbo].[PhonePurchases]
+    ) AS tbl 
+    WHERE (@Page-1)*8 < RoNum AND tbl.[BuyerId] = @UserId
+    ORDER BY tbl.Id
 end
