@@ -157,12 +157,15 @@ namespace Phone_Api.Repository
 			var histories = await DatabaseOperations.GenericQueryList<dynamic, BidHistoryModel>(sql, new { UserName = userName, Page = page }, _configuration);
 
 			List<BidModel> bids = new List<BidModel>();
+			List<string> bidIds = new List<string>();
 
 			foreach (var history in histories)
 			{
 				BidModel bid = await GetBidByIdAsync(history.Bid_Id);
 
-				if (bid != null) bids.Add(bid);
+				if (bid != null && !bidIds.Contains(history.Bid_Id)) bids.Add(bid);
+
+				bidIds.Add(history.Bid_Id);
 			}
 
 			return bids;
