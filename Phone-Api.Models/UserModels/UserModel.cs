@@ -14,5 +14,7 @@ namespace Phone_Api.Models
 		public int Phones_sold { get; set; }
 		public string PhoneNumber{ get; set; }
 		public bool EmailConfirmed { get; set; }
+		public int LoyalityPoints { get; set; }
+
 	}
 }
