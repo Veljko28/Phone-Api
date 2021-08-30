@@ -155,5 +155,39 @@ namespace Phone_Api.Controllers
 			return Ok(email);
 		}
 
+		[HttpPost(ApiRoutes.UserRoutes.AddLoyalityPoints)]
+		public async Task<IActionResult> AddLoyalityPoints([FromRoute] string userId)
+		{
+			var response = await _users.AddLoyalityPointsAsync(userId);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
+			}
+
+			return Ok();
+		}
+
+		[HttpGet(ApiRoutes.UserRoutes.GetLoyalityPoints)]
+		public async Task<IActionResult> GetLoyalityPoints([FromRoute] string userId)
+		{
+			int points = await _users.GetLoyalityPointsAsync(userId);
+
+			return Ok(points);
+		}
+
+		[HttpPost(ApiRoutes.UserRoutes.RemoveLoyalityPoints)]
+		public async Task<IActionResult> RemoveLoyalityPoints([FromBody] RemoveLoyalityPointsRequest request)
+		{
+			var response = await _users.RemoveLoyalityPointsAsync(request);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
+			}
+
+			return Ok();
+		}
+
 	}
 }
