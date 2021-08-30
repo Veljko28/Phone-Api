@@ -304,5 +304,37 @@ namespace Phone_Api.Repository
 
 			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { UserName = userName }, _configuration);
 		}
+
+		public async Task<GenericResponse> AddLoyalityPointsAsync(string userId)
+		{
+			string sql = "exec [_spAddLoyalityPoints] @Id";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = userId }, _configuration, "Failed to add loyality points");
+		}
+
+		public async Task<int> GetLoyalityPointsAsync(string userId)
+		{
+			string sql = "exec [_spGetLoyalityPoints] @Id";
+
+			return await DatabaseOperations.GenericQuerySingle<dynamic, int>(sql, new { Id = userId }, _configuration);
+		}
+
+		public async Task<GenericResponse> RemoveLoyalityPointsAsync(RemoveLoyalityPointsRequest request)
+		{
+			int userPoints = await GetLoyalityPointsAsync(request.UserId);
+
+			if (request.Amount > userPoints) return new GenericResponse { Success = false, ErrorMessage = "You don't have enough points for this purchase" };
+
+			string sql = "exec [_spRemoveLoyalityPoints] @Id, @Amount";
+
+			return await DatabaseOperations.GenericExecute(sql, new { Id = request.UserId, request.Amount }, _configuration, "Failed to remove loyality points");
+		}
+
+		public async Task<GenericResponse> AddUserCouponAsync(string userId, string amount, string coupon)
+		{
+			string sql = "exec [_spAddUserCoupon] @UserId, @Coupon, @Amount";
+
+			return await DatabaseOperations.GenericExecute(sql, new { UserId = userId, Coupon = coupon, Amount = amount }, _configuration, "Failed to add coupon the database");
+		}
 	}
 }

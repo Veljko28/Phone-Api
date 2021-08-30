@@ -10,6 +10,7 @@ namespace Phone_Api.Repository.Interfaces
 {
 	public interface IUserRepository
 	{
+		Task<int> GetLoyalityPointsAsync(string userId);
 		Task<bool> UpdatePhonesSoldAsync(string userId);
 		Task<UserModel> GetUserByIdAsync(string Id);
 		Task<UserModel> GetUserByEmailAsync(string email);
@@ -19,6 +20,9 @@ namespace Phone_Api.Repository.Interfaces
 		Task<string> RegisterAsync(UserRequest userRequest);
 		Task<TokenResponse> LoginAsync(LoginRequest loginRequest);
 		Task<TokenResponse> RefreshTokenAsync(string token, string refreshToken);
+		Task<GenericResponse> AddLoyalityPointsAsync(string userId);
+		Task<GenericResponse> AddUserCouponAsync(string userId, string amount, string coupon);
+		Task<GenericResponse> RemoveLoyalityPointsAsync(RemoveLoyalityPointsRequest request);
 		Task<GenericResponse> EditUserProfileAsync(string userId, EditProfileModel model);
 		Task<GenericResponse> ChangePasswordAsync(string userId, ChangePasswordRequest change);
 
