@@ -29,8 +29,6 @@ namespace Phone_Api.Helpers
 
 			public const string Delete = type + "/delete" + "/{phoneId}";
 
-			public const string Reviews = type + "/reviews" + "/{phoneId}";
-
 			public const string Edit = type + "/edit";
 			
 			public const string ChangeStatus = type + "/status";
@@ -60,6 +58,12 @@ namespace Phone_Api.Helpers
 			public const string GetUserEmail = type + "/{userId}/email";
 
 			public const string GetUserIdByName = type + "/userId/{userName}";
+
+			public const string AddLoyalityPoints = type + "/loyality/add";
+
+			public const string RemoveLoyalityPoints = type + "/loyality/remove";
+
+			public const string GetLoyalityPoints = type + "/loyality/get/{userId}";
 
 		}
 
@@ -98,6 +102,8 @@ namespace Phone_Api.Helpers
 			public const string AddReview = type + "/review";
 
 			public const string ConfirmEmail = type + "/confirmemail/{userId}";
+
+			public const string CheckCoupon = type + "/coupon/check";
 
 		}
 
@@ -157,6 +163,19 @@ namespace Phone_Api.Helpers
 			public const string ConfirmEmail = type + "/confirm";
 
 			public const string ItemSold = type + "/sold";
+
+			public const string SendCoupon = type + "/coupon";
+		}
+
+		public static class ReviewRoutes
+		{
+			private const string type = root + version + "/reviews";
+
+			public const string AddReview = type + "/add";
+
+			public const string GetUserReviews = type + "/{userId}";
+
+			public const string Reviewed = type + "/reviewed/{buyerId}/{phoneId}";
 		}
 
 	}

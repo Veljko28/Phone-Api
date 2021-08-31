@@ -25,6 +25,7 @@ namespace Phone_Api.Installers
 			services.AddSingleton<IBidRepository, BidRepository>();
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddSingleton<IMailService, MailService>();
+			services.AddSingleton<IReviewRepository, ReviewRepository>();
 
 
 			services.AddSingleton<IWishListRepository, WishListRepository>();
