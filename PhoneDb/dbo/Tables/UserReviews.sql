@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[UserReviews]
+(
+	[Id] NVARCHAR(50) NOT NULL PRIMARY KEY,
+	[Rating] int NOT NULL,
+	[BuyerId] NVARCHAR(50) NOT NULL,
+	[SellerId] NVARCHAR(50) NOT NULL,
+	[PhoneId] NVARCHAR(50) NOT NULL,
+	[DateCreated] DATETIME2(7) NOT NULL DEFAULT getutcdate(),
+	[Message] NVARCHAR(256) NOT NULL
+)
