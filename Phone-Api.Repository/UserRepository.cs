@@ -5,6 +5,7 @@ using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
+using Phone_Api.Models.ReviewModels;
 using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
@@ -305,11 +306,20 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQuerySingle<dynamic, string>(sql, new { UserName = userName }, _configuration);
 		}
 
-		public async Task<GenericResponse> AddLoyalityPointsAsync(string userId)
+		public async Task<GenericResponse> AddLoyalityPointsAsync(LoyalityPointsRequest request)
 		{
-			string sql = "exec [_spAddLoyalityPoints] @Id";
+			if (request.Amount == 0)
+			{
+				string sql = "exec [_spAddLoyalityPoints] @Id";
 
-			return await DatabaseOperations.GenericExecute(sql, new { Id = userId }, _configuration, "Failed to add loyality points");
+				return await DatabaseOperations.GenericExecute(sql, new { Id = request.UserId }, _configuration, "Failed to add loyality points");
+			}
+			else
+			{
+				string sql = "exec [_spAddLoyalityPointsAmount] @Id, @Amount";
+
+				return await DatabaseOperations.GenericExecute(sql, new { Id = request.UserId, request.Amount }, _configuration, "Failed to add loyality points");
+			}
 		}
 
 		public async Task<int> GetLoyalityPointsAsync(string userId)
@@ -319,7 +329,7 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQuerySingle<dynamic, int>(sql, new { Id = userId }, _configuration);
 		}
 
-		public async Task<GenericResponse> RemoveLoyalityPointsAsync(RemoveLoyalityPointsRequest request)
+		public async Task<GenericResponse> RemoveLoyalityPointsAsync(LoyalityPointsRequest request)
 		{
 			int userPoints = await GetLoyalityPointsAsync(request.UserId);
 
@@ -330,11 +340,18 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericExecute(sql, new { Id = request.UserId, request.Amount }, _configuration, "Failed to remove loyality points");
 		}
 
-		public async Task<GenericResponse> AddUserCouponAsync(string userId, string amount, string coupon)
+		public async Task<GenericResponse> AddUserCouponAsync(CouponModel model)
 		{
 			string sql = "exec [_spAddUserCoupon] @UserId, @Coupon, @Amount";
 
-			return await DatabaseOperations.GenericExecute(sql, new { UserId = userId, Coupon = coupon, Amount = amount }, _configuration, "Failed to add coupon the database");
+			return await DatabaseOperations.GenericExecute(sql, model, _configuration, "Failed to add coupon the database");
+		}
+
+		public async Task<IEnumerable<ReviewModel>> GetUserReviewsAsync(string userId)
+		{
+			string sql = "exec [_spGetUserReviews] @SellerId";
+
+			return await DatabaseOperations.GenericQueryList<dynamic, ReviewModel>(sql, new { SellerId = userId }, _configuration);
 		}
 	}
 }

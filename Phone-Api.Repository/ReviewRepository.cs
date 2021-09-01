@@ -45,12 +45,6 @@ namespace Phone_Api.Repository
 			return model != null;
 		}
 
-		public async Task<IEnumerable<ReviewModel>> GetUserReviewsAsync(string userId)
-		{
-			string sql = "exec [_spGetUserReviews] @SellerId";
-
-			return await DatabaseOperations.GenericQueryList<dynamic, ReviewModel>(sql, new { SellerId = userId }, _configuration);
-		}
 
 	}
 }

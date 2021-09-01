@@ -12,7 +12,6 @@ namespace Phone_Api.Repository.Interfaces
 	public interface IReviewRepository
 	{
 		Task<GenericResponse> AddReviewAsync(ReviewModelRequest req);
-		Task<IEnumerable<ReviewModel>> GetUserReviewsAsync(string userId);
 		Task<bool> CheckReviewedAsync(ReviewedCheckRequest request);
 	}
 }
