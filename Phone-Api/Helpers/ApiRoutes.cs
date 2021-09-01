@@ -65,6 +65,8 @@ namespace Phone_Api.Helpers
 
 			public const string GetLoyalityPoints = type + "/loyality/get/{userId}";
 
+			public const string GetUserReviews = type + "/reviews/{userId}";
+
 		}
 
 		public static class WishlistRoutes
@@ -172,8 +174,6 @@ namespace Phone_Api.Helpers
 			private const string type = root + version + "/reviews";
 
 			public const string AddReview = type + "/add";
-
-			public const string GetUserReviews = type + "/{userId}";
 
 			public const string Reviewed = type + "/reviewed/{buyerId}/{phoneId}";
 		}
