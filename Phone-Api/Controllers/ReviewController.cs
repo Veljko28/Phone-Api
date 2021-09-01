@@ -31,14 +31,6 @@ namespace Phone_Api.Controllers
 			return Ok();
 		}
 
-		[HttpGet(ApiRoutes.ReviewRoutes.GetUserReviews)]
-		public async Task<IActionResult> GetUserReviews([FromRoute] string userId)
-		{
-			var list = await _reviews.GetUserReviewsAsync(userId);
-
-			return Ok(list);
-		}
-
 		[HttpGet(ApiRoutes.ReviewRoutes.Reviewed)]
 		public async Task<IActionResult> Reviewed([FromRoute] string buyerId, [FromRoute] string phoneId)
 		{

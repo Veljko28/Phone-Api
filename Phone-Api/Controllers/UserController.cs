@@ -7,6 +7,7 @@ using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
@@ -155,10 +156,12 @@ namespace Phone_Api.Controllers
 			return Ok(email);
 		}
 
+	
+
 		[HttpPost(ApiRoutes.UserRoutes.AddLoyalityPoints)]
-		public async Task<IActionResult> AddLoyalityPoints([FromRoute] string userId)
+		public async Task<IActionResult> AddLoyalityPoints([FromBody] LoyalityPointsRequest request )
 		{
-			var response = await _users.AddLoyalityPointsAsync(userId);
+			var response = await _users.AddLoyalityPointsAsync(request);
 
 			if (!response.Success)
 			{
@@ -177,7 +180,7 @@ namespace Phone_Api.Controllers
 		}
 
 		[HttpPost(ApiRoutes.UserRoutes.RemoveLoyalityPoints)]
-		public async Task<IActionResult> RemoveLoyalityPoints([FromBody] RemoveLoyalityPointsRequest request)
+		public async Task<IActionResult> RemoveLoyalityPoints([FromBody] LoyalityPointsRequest request)
 		{
 			var response = await _users.RemoveLoyalityPointsAsync(request);
 
@@ -187,6 +190,35 @@ namespace Phone_Api.Controllers
 			}
 
 			return Ok();
+		}
+
+		[HttpGet(ApiRoutes.UserRoutes.GetUserReviews)]
+		public async Task<IActionResult> GetUserReviews([FromRoute] string userId)
+		{
+			var list = await _users.GetUserReviewsAsync(userId);
+			List<ReviewModelResponse> responses = new List<ReviewModelResponse>();
+
+			foreach (var item in list)
+			{
+				string Username = await _users.GetUserNameByIdAsync(item.BuyerId);
+
+				ReviewModelResponse model = new ReviewModelResponse
+				{
+					Id = item.Id,
+					BuyerId = item.BuyerId,
+					SellerId = item.SellerId,
+					PhoneId = item.PhoneId,
+					DateCreated = item.DateCreated,
+					Message = item.Message,
+					Rating = item.Rating,
+					UserName = Username
+				};
+
+				responses.Add(model);
+
+			}
+
+			return Ok(responses);
 		}
 
 	}
