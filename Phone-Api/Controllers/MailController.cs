@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Phone_Api.Helpers;
+using Phone_Api.Models;
 using Phone_Api.Models.EmailModels;
+using Phone_Api.Models.Requests;
 using Phone_Api.Repository.Interfaces;
 using Phone_Api.Services;
 using System;
@@ -46,6 +48,36 @@ namespace Phone_Api.Controllers
 			if (!sold)
 			{
 				return BadRequest("Failed to sell the phone");
+			}
+
+			return Ok();
+		}
+
+		[HttpPost(ApiRoutes.EmailRoutes.SendCoupon)]
+		public async Task<IActionResult> SendCoupon([FromBody] LoyalityPointsRequest request)
+		{
+			string email = await _users.GetEmailByIdAsync(request.UserId);
+			string amount = request.Amount.ToString() + "%";
+
+			string coupon = await _mail.SendCouponEmailAsync(email, amount);
+
+			if (coupon == null)
+			{
+				return BadRequest("Failed to send the coupon");
+			}
+
+			CouponModel model = new CouponModel
+			{
+				UserId = request.UserId,
+				Amount = amount,
+				Coupon = coupon
+			};
+
+			var response = await _users.AddUserCouponAsync(model);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
 			}
 
 			return Ok();
