@@ -21,6 +21,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<string> RegisterAsync(UserRequest userRequest);
 		Task<TokenResponse> LoginAsync(LoginRequest loginRequest);
 		Task<TokenResponse> RefreshTokenAsync(string token, string refreshToken);
+		Task<GenericResponse> UpdateRatingAsync(double rating, string userId);
 		Task<GenericResponse> AddLoyalityPointsAsync(LoyalityPointsRequest request);
 		Task<GenericResponse> RemoveLoyalityPointsAsync(LoyalityPointsRequest request);
 		Task<GenericResponse> EditUserProfileAsync(string userId, EditProfileModel model);

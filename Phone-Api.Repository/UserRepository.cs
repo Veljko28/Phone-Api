@@ -353,5 +353,12 @@ namespace Phone_Api.Repository
 
 			return await DatabaseOperations.GenericQueryList<dynamic, ReviewModel>(sql, new { SellerId = userId }, _configuration);
 		}
+
+		public async Task<GenericResponse> UpdateRatingAsync(double rating, string userId)
+		{
+			string sql = "exec [_spUpdateUserRating] @UserId, @Rating";
+
+			return await DatabaseOperations.GenericExecute(sql, new { UserId = userId, Rating = rating }, _configuration, "Failed to update rating");
+		}
 	}
 }
