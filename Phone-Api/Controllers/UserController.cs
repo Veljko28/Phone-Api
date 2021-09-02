@@ -8,6 +8,7 @@ using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
 using Phone_Api.Repository.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Phone_Api.Controllers
@@ -96,7 +97,8 @@ namespace Phone_Api.Controllers
 				Description = response.Description,
 				PhoneNumber = response.PhoneNumber,
 				Phones_sold = response.Phones_sold,
-				EmailConfirmed = response.EmailConfirmed
+				EmailConfirmed = response.EmailConfirmed,
+				Rating = response.Rating
 			};
 
 			return Ok(userResponse);
@@ -219,6 +221,30 @@ namespace Phone_Api.Controllers
 			}
 
 			return Ok(responses);
+		}
+
+		[HttpPatch(ApiRoutes.UserRoutes.UpdateRating)]
+		public async Task<IActionResult> UpdateRating([FromRoute] string userId)
+		{
+			var reviews = await _users.GetUserReviewsAsync(userId);
+
+			double rating = 0;
+
+			foreach (var review in reviews)
+			{
+				rating += review.Rating;
+			}
+
+			rating /= reviews.Count();
+
+			var response = await _users.UpdateRatingAsync(rating, userId);
+
+			if (!response.Success)
+			{
+				return BadRequest(response.ErrorMessage);
+			}
+
+			return Ok();
 		}
 
 	}
