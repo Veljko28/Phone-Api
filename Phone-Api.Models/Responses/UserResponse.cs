@@ -14,5 +14,6 @@ namespace Phone_Api.Models.Responses
 		public string PhoneNumber { get; set; }
 		public bool EmailConfirmed { get; set; }
 		public int LoyalityPoints { get; set; }
+		public float Rating { get; set; }
 	}
 }
