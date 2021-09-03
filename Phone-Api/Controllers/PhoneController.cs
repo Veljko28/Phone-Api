@@ -124,18 +124,6 @@ namespace Phone_Api.Controllers
 
 		}
 
-
-
-		[HttpGet(ApiRoutes.PhoneRoutes.Reviews)]
-		public async Task<IActionResult> PhoneReviews([FromRoute] string phoneId)
-		{
-			var phones = await _phones.GetPhoneReviewsById(phoneId);
-
-			return genericResponse(phones, "failed to get latest phones");
-
-		}
-
-
 		[HttpDelete(ApiRoutes.PhoneRoutes.Delete)]
 		public async Task<IActionResult> Delete([FromRoute] string phoneId)
 		{
