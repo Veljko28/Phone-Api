@@ -234,31 +234,6 @@ namespace Phone_Api.Controllers
             return (await DatabaseOperations.GenericExecute(sql, new { ImagePath = imagePath, PhoneId = phoneId }, _configuration, "Failed to remove the image")).Success;
 		}
 
-        [HttpPost(ApiRoutes.GenericRoutes.AddReview)]
-        public async Task<IActionResult> AddReview([FromBody] ReviewRequestModel model)
-		{
-            ReviewModel review = new ReviewModel
-            {
-                Id = Guid.NewGuid().ToString(),
-                Message = model.Message,
-                Rating = model.Rating,
-                UserId = model.UserId,
-                PhoneId = model.PhoneId,
-                DateCreated = model.DateCreated
-            };
-
-            string sql = "exec [_spAddReview] @Id, @Message, @Rating, @UserId, @PhoneId, @DateCreated";
-
-            GenericResponse res = await DatabaseOperations.GenericExecute(sql, review, _configuration, "Failed to add the review");
-
-            if (res.Success)
-			{
-                return Ok();
-			}
-
-            return BadRequest(res.ErrorMessage);
-		}
-
         [HttpGet(ApiRoutes.GenericRoutes.ConfirmEmail)]
         public async Task<IActionResult> ConfirmUserEmail([FromRoute] string userId)
 		{
@@ -280,5 +255,39 @@ namespace Phone_Api.Controllers
 
             return Ok();
 		}
+
+        [HttpPost(ApiRoutes.GenericRoutes.CheckCoupon)]
+        public async Task<IActionResult> CheckCoupon([FromBody] CouponRequest request)
+		{
+            string sql = "exec [_spFindUserCoupon] @Coupon";
+
+            CouponModel model = await DatabaseOperations.GenericQuerySingle<dynamic, CouponModel>(sql, new { request.Coupon }, _configuration);
+
+            if (model == null)
+			{
+                return NotFound("Failed to find the coupon");
+			}
+
+            if (model.UserId != request.UserId)
+			{
+                return BadRequest("This is not your coupon!");
+			}
+
+            if (!model.Valid)
+			{
+                return BadRequest("This coupon has already been used");
+			}
+
+            sql = "exec [_spInvalidateCoupon] @Id";
+
+            GenericResponse response = await DatabaseOperations.GenericExecute(sql, new { model.Id }, _configuration, "Failed to invalidate coupon");
+
+            if (!response.Success)
+			{
+                return BadRequest(response.ErrorMessage);
+			}
+
+            return Ok(model);
+        }
     }
 }
