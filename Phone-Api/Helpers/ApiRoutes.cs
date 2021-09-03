@@ -67,6 +67,8 @@ namespace Phone_Api.Helpers
 
 			public const string GetUserReviews = type + "/reviews/{userId}";
 
+			public const string UpdateRating = type + "/rating/{userId}";
+
 		}
 
 		public static class WishlistRoutes
