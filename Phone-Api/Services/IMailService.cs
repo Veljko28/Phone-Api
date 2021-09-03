@@ -10,6 +10,6 @@ namespace Phone_Api.Services
 	{
 		Task SendCofirmEmailAsync(ConfirmEmailModel model);
 		Task SendItemSoldEmailAsync(ItemSoldEmailModel model);
-
+		Task<string> SendCouponEmailAsync(string email, string amount);
 	}
 }

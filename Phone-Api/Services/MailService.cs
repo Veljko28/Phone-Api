@@ -81,6 +81,30 @@ namespace Phone_Api.Services
 				 "A warm welcome by the MobiStore Support Team © 2021");
 		}
 
+		public async Task<string> SendCouponEmailAsync(string email, string amount)
+		{
+			string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			char[] stringChars = new char[15];
+			Random random = new Random();
+
+			for (int i = 0; i < stringChars.Length; i++)
+			{
+				stringChars[i] = chars[random.Next(chars.Length)];
+			}
+
+			string coupon = new String(stringChars);
+
+			await GenericEmail(email,
+				"Your " + amount + " Off Coupon - MobiStore - Online Mobile Store",
+				"http://localhost:3000",
+				"Coupon " + amount + " Off",
+				"You have successfully puchased the " + amount + " off coupon. Now go and use it ! <br/> <strong>Coupon: " + coupon +"</strong>",
+				 "Go to website",
+				 "MobiStore Support Team © 2021");
+
+			return coupon;
+		}
+
 		public async Task SendItemSoldEmailAsync(ItemSoldEmailModel model)
 		{
 			await GenericEmail(model.Email,
