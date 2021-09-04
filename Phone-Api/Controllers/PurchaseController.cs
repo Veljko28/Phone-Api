@@ -57,6 +57,7 @@ namespace Phone_Api.Controllers
 			return Ok(phones);
 		}
 
+		[AllowAnonymous]
 		[HttpGet(ApiRoutes.PurchaseRoutes.PhoneBoughtByUser)]
 		public async Task<IActionResult> PhoneBoughtByUser([FromRoute] string userId, [FromRoute] string phoneId)
 		{

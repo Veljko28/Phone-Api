@@ -103,7 +103,7 @@ namespace Phone_Api.Controllers
 
 		}
 
-
+		[AllowAnonymous]
 		[HttpPost(ApiRoutes.WishlistRoutes.IsInWishList)]
 		public async Task<IActionResult> IsInWishList([FromBody] PageInWishListRequest model)
 		{
