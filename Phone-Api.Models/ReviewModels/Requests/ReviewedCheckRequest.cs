@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Phone_Api.Models
+namespace Phone_Api.Models.ReviewModels.Requests
 {
-	public class PurchaseRequest
+	public class ReviewedCheckRequest
 	{
 		public string BuyerId { get; set; }
-		public string SellerId { get; set; }
 		public string PhoneId { get; set; }
-
 	}
 }
