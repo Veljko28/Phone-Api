@@ -45,6 +45,14 @@ namespace Phone_Api.Controllers
 		[HttpPost(ApiRoutes.BidRoutes.AddHistory)]
 		public async Task<IActionResult> AddHistory([FromBody] BidHistoryRequest req)
 		{
+			var bid = await _bids.GetBidByIdAsync(req.Bid_Id);
+
+			if (bid.Date_Ends < DateTime.UtcNow)
+			{
+				return BadRequest("The bid has already ended");
+			}
+
+
 			var result = await _bids.AddToBidHistoryAsync(req);
 
 			if (!result.Success)
