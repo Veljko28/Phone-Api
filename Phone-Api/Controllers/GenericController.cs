@@ -27,16 +27,17 @@ namespace Phone_Api.Controllers
         private readonly IWebHostEnvironment environment;
 		private readonly IConfiguration _configuration;
         private readonly IUserRepository _users;
+        private readonly IPhoneRepository _phones;
 
-        public GenericController(IWebHostEnvironment _environment, IConfiguration configuration, IUserRepository users)
-        {
-            environment = _environment;
+		public GenericController(IWebHostEnvironment _environment, IConfiguration configuration, IUserRepository users, IPhoneRepository phones)
+		{
+			environment = _environment;
 			_configuration = configuration;
-            _users = users;
+			_users = users;
+			_phones = phones;
+		}
 
-        }
-
-        public class FormUpload
+		public class FormUpload
         {
             [NotMapped]
             public IFormFile Files { get; set; }
@@ -148,7 +149,17 @@ namespace Phone_Api.Controllers
 				}
 			}
 
-			return Ok("Successfully added all images");
+            string DisplayImage = (await _phones.GetPhoneImagesAsync(req.Id)).FirstOrDefault();
+
+            if (DisplayImage != null)
+            {
+                string updateSql = "exec [_spUpdateDisplayImage] @ImagePath, @PhoneId";
+
+                await DatabaseOperations.GenericExecute(updateSql, new { ImagePath = DisplayImage, PhoneId = req.Id}, _configuration, "Failed to change display image");
+            }
+
+
+            return Ok("Successfully added all images");
         }
 
         [HttpPost(ApiRoutes.GenericRoutes.Contact)]
@@ -227,12 +238,6 @@ namespace Phone_Api.Controllers
             return Ok(model);
 		}
 
-        public static async Task<bool> RemoveImage(string imagePath, string phoneId, IConfiguration _configuration)
-		{
-            string sql = "exec [_spRemovePhoneImage] @ImagePath, @PhoneId";
-
-            return (await DatabaseOperations.GenericExecute(sql, new { ImagePath = imagePath, PhoneId = phoneId }, _configuration, "Failed to remove the image")).Success;
-		}
 
         [HttpGet(ApiRoutes.GenericRoutes.ConfirmEmail)]
         public async Task<IActionResult> ConfirmUserEmail([FromRoute] string userId)
