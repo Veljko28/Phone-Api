@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -7,8 +8,10 @@ using Phone_Api.Helpers;
 using Phone_Api.Models;
 using Phone_Api.Models.Requests;
 using Phone_Api.Models.Responses;
+using Phone_Api.Repository.Helpers;
 using Phone_Api.Repository.Interfaces;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,11 +22,13 @@ namespace Phone_Api.Controllers
 	{
 		private readonly IPhoneRepository _phones;
 		private readonly IConfiguration _configuration;
+		private readonly IWebHostEnvironment _environment;
 
-		public PhoneController(IPhoneRepository phones, IConfiguration configuration)
+		public PhoneController(IPhoneRepository phones, IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			_phones = phones;
 			_configuration = configuration;
+			_environment = environment;
 		}
 
 		private IActionResult genericResponse<T>(T success, string error)
@@ -143,21 +148,39 @@ namespace Phone_Api.Controllers
 		{
 			var phone = await _phones.EditPhoneAsync(editModel.Model);
 
-			IEnumerable<string> Images = await _phones.GetPhoneImagesAsync(editModel.Model.Id);
+			List<string> Images = (await _phones.GetPhoneImagesAsync(editModel.Model.Id)).ToList();
 
 			foreach (string image in Images)
 			{
 				if (!editModel.Images.Contains(image))
 				{
-					bool removed = await GenericController.RemoveImage(image, editModel.Model.Id, _configuration);
+					string sql = "exec [_spRemovePhoneImage] @ImagePath, @PhoneId";
+
+					string imageName = image.Split('/').LastOrDefault();
+					string fullPath = Path.Combine(_environment.WebRootPath + "\\Uploads\\" + imageName);
+
+					bool removed = (await DatabaseOperations.GenericExecute(sql, new { ImagePath = image, PhoneId = editModel.Model.Id }, _configuration, "Failed to remove the image")).Success;
+
+					try
+					{
+						if (System.IO.File.Exists(fullPath))
+						{
+							System.IO.File.Delete(fullPath);
+						}
+
+					}
+					catch (Exception err)
+					{
+						throw new Exception(err.Message);
+					}
 
 					if (!removed)
 					{
 						return BadRequest("Failed to remove one of the images");
 					}
+
 				}
 			}
-
 
 			if (phone.Success)
 			{
