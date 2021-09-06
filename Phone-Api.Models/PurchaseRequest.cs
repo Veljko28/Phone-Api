@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Phone_Api.Models
 {
-	public class WishListModel
+	public class PurchaseRequest
 	{
-		public string Id { get; set; }
-		public string UserId { get; set; }
+		public string BuyerId { get; set; }
+		public string SellerId { get; set; }
 		public string PhoneId { get; set; }
-		public string Type { get; set; }
+
 	}
 }
