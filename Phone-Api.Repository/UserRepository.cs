@@ -60,8 +60,11 @@ namespace Phone_Api.Repository
 
 				string dbPassword = user.Password;
 
-				if (!PasswordHashing.ComparePasswords(dbPassword, change.Current_Password))
-						return new GenericResponse { Success = false, ErrorMessage = "Incorrect Password !" };
+				if (dbPassword != change.Current_Password)
+				{
+					if (!PasswordHashing.ComparePasswords(dbPassword, change.Current_Password))
+							return new GenericResponse { Success = false, ErrorMessage = "Incorrect Password !" };
+				}
 
 				string passwordHash = PasswordHashing.HashPassword(change.New_Password);
 

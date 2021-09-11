@@ -122,6 +122,14 @@ namespace Phone_Api.Controllers
 
 		public async Task<IActionResult> EditUserProfile([FromRoute] string userId, [FromBody] EditProfileModel model)
 		{
+			var emailUser = await _users.GetUserByEmailAsync(model.Email);
+
+			if (emailUser.Id != userId) return BadRequest("Failed to find user");
+
+			var userNameInUse = await _users.GetUserIdByNameAsync(model.UserName);
+
+			if (userNameInUse != null) return BadRequest("UserName already in use");
+
 			var response = await _users.EditUserProfileAsync(userId, model);
 
 			if (!response.Success)
