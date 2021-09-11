@@ -105,6 +105,17 @@ namespace Phone_Api.Services
 			return coupon;
 		}
 
+		public async Task SendForgotPasswordEmailAsync(string email, string newPassword)
+		{
+			await GenericEmail(email,
+				"Your New Password - MobiStore - Online Mobile Store",
+				"http://localhost:3000/login",
+				"You have successfully reset your password",
+				"We have successfully reset your password ! The code below will be your<br/> new password which you can change on your profile when you login <br/> <b>Password: " + newPassword + "</b>",
+				 "Login",
+				 "MobiStore Support Team © 2021");
+		}
+
 		public async Task SendItemSoldEmailAsync(ItemSoldEmailModel model)
 		{
 			await GenericEmail(model.Email,

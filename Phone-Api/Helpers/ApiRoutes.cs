@@ -169,6 +169,8 @@ namespace Phone_Api.Helpers
 			public const string ItemSold = type + "/sold";
 
 			public const string SendCoupon = type + "/coupon";
+
+			public const string ForgotPassword = type + "/forgotpassword";
 		}
 
 		public static class ReviewRoutes
