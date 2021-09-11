@@ -82,5 +82,36 @@ namespace Phone_Api.Controllers
 
 			return Ok();
 		}
+
+		[HttpPost(ApiRoutes.EmailRoutes.ForgotPassword)]
+		public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest req)
+		{
+			UserModel user = await _users.GetUserByEmailAsync(req.Email);
+
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			char[] stringChars = new char[15];
+			Random random = new Random();
+
+			for (int i = 0; i < stringChars.Length; i++)
+			{
+				stringChars[i] = chars[random.Next(chars.Length)];
+			}
+
+			string newPassword = new String(stringChars);
+
+			var changed = await _users.ChangePasswordAsync(user.Id, new ChangePasswordRequest { Current_Password = user.Password, Confirm_Current_Password = user.Password, New_Password = newPassword });
+
+			if (changed.Success)
+			{
+				await _mail.SendForgotPasswordEmailAsync(req.Email, newPassword);
+			}
+
+			return Ok();
+		}
 	}
 }
