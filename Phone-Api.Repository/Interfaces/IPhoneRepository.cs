@@ -11,13 +11,13 @@ namespace Phone_Api.Repository.Interfaces
 	public interface IPhoneRepository
 	{
 
-		Task<PhoneModel> AddPhoneAsync(PhoneRequest phoneRequest, string userId);
 		Task<PhoneModel> GetPhoneByIdAsync(string Id);
-		Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId, int pageNum);
-		Task<IEnumerable<string>> GetPhoneImagesAsync(string phoneId);
+		Task<PhoneModel> AddPhoneAsync(PhoneRequest phoneRequest, string userId);
+		Task<IEnumerable<PhoneModel>> GetPhonesAsync();
 		Task<IEnumerable<PhoneModel>> GetLastestPhonesAsync();
 		Task<IEnumerable<PhoneModel>> GetFeaturedPhonesAsync(string phoneId);
-		Task<IEnumerable<PhoneModel>> GetPhonePageAsync(string page);
+		Task<IEnumerable<PhoneModel>> GetSellerPhonesByIdAsync(string sellerId, int pageNum);
+		Task<IEnumerable<string>> GetPhoneImagesAsync(string phoneId);
 		Task<GenericResponse> DeletePhoneAsync(string phoneId);
 		Task<GenericResponse> EditPhoneAsync(PhoneModel model);
 		Task<GenericResponse> ChangeStatusAsync(ChangePhoneStatusRequest request);
