@@ -127,25 +127,19 @@ namespace Phone_Api.Controllers
 			{
 				int numOfPages = await _bids.GetNumOfPagesAsync();
 
-				return genericResponse(new { bids, numOfPages }, "Failed to get latest phones");
+				return genericResponse(new { bids, numOfPages }, "Failed to get user bids");
 			}
 
 			return Ok(bids);
 		}
 		
 		[AllowAnonymous]
-		[HttpGet(ApiRoutes.BidRoutes.GetPage)]
-		public async Task<IActionResult> GetPage([FromRoute] string pageId)
+		[HttpGet(ApiRoutes.BidRoutes.GetBids)]
+		public async Task<IActionResult> GetBids()
 		{
-			var phones = await _bids.GetBidPageAsync(pageId);
-			if (pageId == "1")
-			{
-				int numOfPages = await _bids.GetNumOfPagesAsync();
-
-				return genericResponse(new { phones, numOfPages }, "Failed to get latest phones");
-			}
-
-			return genericResponse(phones, "failed to get latest phones");
+			var bids = await _bids.GetBidsAsync();
+			
+			return genericResponse(bids, "failed to get all bids");
 		}
 
 		[AllowAnonymous]
