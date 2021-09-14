@@ -16,7 +16,7 @@ namespace Phone_Api.Repository.Interfaces
 		Task<BidModel> GetBidByIdAsync(string bid_Id);
 		Task<BidModel> AddBidAsync(BidRequest req, string userId);
 		Task<List<BidModel>> GetPlacedBidsAsync(string userName, int page);
-		Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId);
+		Task<IEnumerable<BidModel>> GetBidsAsync();
 		Task<IEnumerable<BidModel>> GetUserBidsAsync(string userId);
 		Task<IEnumerable<BidHistoryModel>> GetBidHistoriesAsync(string userName);
 		Task<GenericResponse> AddToBidHistoryAsync(BidHistoryRequest req);

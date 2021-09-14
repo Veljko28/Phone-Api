@@ -94,11 +94,11 @@ namespace Phone_Api.Repository
 			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new { Id = userId }, _configuration);
 		}
 
-		public async Task<IEnumerable<BidModel>> GetBidPageAsync(string pageId)
+		public async Task<IEnumerable<BidModel>> GetBidsAsync()
 		{
-			string sql = "exec [_spGetBidPage] @Page";
+			string sql = "exec [_spGetAllBids]";
 
-			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new { Page = pageId }, _configuration);
+			return await DatabaseOperations.GenericQueryList<dynamic, BidModel>(sql, new {  }, _configuration);
 		}
 
 		public async Task<IEnumerable<string>> GetBidImagesAsync(string bid_Id)
