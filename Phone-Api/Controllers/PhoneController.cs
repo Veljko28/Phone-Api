@@ -118,14 +118,12 @@ namespace Phone_Api.Controllers
 		}
 
 
-		[HttpGet(ApiRoutes.PhoneRoutes.GetPage)]
-		public async Task<IActionResult> GetPage([FromRoute] string pageId)
+		[HttpGet(ApiRoutes.PhoneRoutes.GetPhones)]
+		public async Task<IActionResult> GetPhones()
 		{
-			var phones = await _phones.GetPhonePageAsync(pageId);
-			
-			int numOfPages = await _phones.GetNumOfPagesAsync();
+			var phones = await _phones.GetPhonesAsync();
 
-			return genericResponse(new { phones, numOfPages }, "Failed to get latest phones");
+			return genericResponse(phones, "Failed to get phones");
 
 		}
 

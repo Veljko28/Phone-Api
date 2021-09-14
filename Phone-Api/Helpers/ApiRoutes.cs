@@ -25,7 +25,7 @@ namespace Phone_Api.Helpers
 
 			public const string GetImages = type + "/images" + "/{phoneId}";
 
-			public const string GetPage = type + "/page" + "/{pageId}";
+			public const string GetPhones = type + "/all";
 
 			public const string Delete = type + "/delete" + "/{phoneId}";
 
@@ -137,7 +137,7 @@ namespace Phone_Api.Helpers
 
 			public const string BidHistories = type +  "/histories/{bid_Id}";
 
-			public const string GetPage = type + "/page" + "/{pageId}";
+			public const string GetBids = type + "/all";
 
 			public const string GetImages = type + "/images" + "/{bid_Id}";
 
