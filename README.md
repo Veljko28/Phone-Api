@@ -1,6 +1,7 @@
 ## MobiStore - ASP .NET CORE API
 
 ![MobiStore](/logo2.png?raw=true "MobiStore")
+### This code is deprecated (because of the SMTP client).  
 
 This is an api made for the MobiStore frontend made with react.
 The main things used for this project are `.NET Core`, `Dapper`, `MSSqlServer`, `Jwt`, and `Stored Procedures`.
@@ -15,7 +16,7 @@ The api is made of four main parts:
 3. The `Repository` Libarary
 4. The `Database`
 
-The api is mode with .net core 5.0 and it has controllers and service installers.The model library contains all the models for the api. The repository is the connection between the database and the api. The database uses ms sql server and stored procedures.
+The api is made with .net core 5.0 and it has controllers and service installers.The model library contains all the models for the api. The repository is the connection between the database and the api. The database uses ms sql server and stored procedures.
 
 ## Cloning the code 
 
